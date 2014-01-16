@@ -1,0 +1,110 @@
+<T3DataStructure>
+    <sheets>
+        <settings>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>Settings</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.baseWeatherUrl>
+                        <TCEforms>
+                            <label>base weather url</label>
+                            <config>
+                                <type>input</type>
+                                <readOnly>1</readOnly>
+                                <default>http://api.openweathermap.org/data/2.5/</default>
+                                <eval>url</eval>
+                            </config>
+                        </TCEforms>
+                    </settings.baseWeatherUrl>
+                    <settings.baseImgUrl>
+                        <TCEforms>
+                            <label>base image url</label>
+                            <config>
+                                <type>input</type>
+                                <readOnly>1</readOnly>
+                                <default>http://openweathermap.org/img/w/</default>
+                                <eval>url</eval>
+                            </config>
+                        </TCEforms>
+                    </settings.baseImgUrl>
+                    <settings.apiName>
+                        <TCEforms>
+                            <label>Api name</label>
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0">weather</numIndex>
+                                        <numIndex index="1">weather</numIndex>
+                                    </numIndex>
+                                    <numIndex index="1" type="array">
+                                        <numIndex index="0">forecast</numIndex>
+                                        <numIndex index="1">forecast</numIndex>
+                                    </numIndex>
+                                    <numIndex index="2" type="array">
+                                        <numIndex index="0">find</numIndex>
+                                        <numIndex index="1">find</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.apiName>
+                    <settings.query>
+                        <TCEforms>
+                            <label>Query</label>
+                            <config>
+                                <type>input</type>
+                                <size>50</size>
+                                <max>50</max>
+                                <eval>nospace</eval>
+                                <default>frankfurt,germany</default>
+                            </config>
+                        </TCEforms>
+                    </settings.query>
+                    <settings.units>
+                        <TCEforms>
+                            <label>units</label>
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0">metric</numIndex>
+                                        <numIndex index="1">metric</numIndex>
+                                    </numIndex>
+                                    <numIndex index="1" type="array">
+                                        <numIndex index="0">imperial</numIndex>
+                                        <numIndex index="1">imperial</numIndex>
+                                    </numIndex>
+                                    <numIndex index="2" type="array">
+                                        <numIndex index="0">internal</numIndex>
+                                        <numIndex index="1">internal</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.units>
+                    <settings.type>
+                        <TCEforms>
+                            <label>type</label>
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0">accurate</numIndex>
+                                        <numIndex index="1">accurate</numIndex>
+                                    </numIndex>
+                                    <numIndex index="1" type="array">
+                                        <numIndex index="0">like</numIndex>
+                                        <numIndex index="1">like</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.type>
+                </el>
+            </ROOT>
+        </settings>
+    </sheets>
+</T3DataStructure>

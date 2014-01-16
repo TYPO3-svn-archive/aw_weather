@@ -25,6 +25,7 @@ namespace Alexweb\AwWeather\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use Alexweb\AwWeather\Domain\Model\Weather;
+use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
 
 /**
  *
@@ -35,12 +36,6 @@ use Alexweb\AwWeather\Domain\Model\Weather;
  */
 class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
-	/**
-	 * weatherRepository
-	 *
-	 * @var \Alexweb\AwWeather\Domain\Repository\WeatherRepository
-	 * @inject
-	 */
 	protected $weatherRepository;
 
 	/**
@@ -50,15 +45,16 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
     public function listAction()
     {
+        //var_dump($this->settings);
         $response = null;
 
         $Model = new Weather();
         $Model
-            ->setApiName("weather")
-            ->setQuery("frankfurt,germany")
-            ->setUnits()
+            ->setApiName($this->settings["apiName"])
+            ->setQuery($this->settings["query"])
+            ->setUnits($this->settings["units"])
+            ->setType($this->settings["type"])
             ->setMode()
-            ->setType()
             ->setUrl()
         ;
 
@@ -93,10 +89,10 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $response = json_decode(file_get_contents($url), true);
         }
 
+        //var_dump($response);
+
         if(count($response["weather"]) > 0)
             $response["weather"] = $response["weather"][0];
-
-        //var_dump($response);
 
         $this->view->assign('response', $response);
     }
