@@ -1,0 +1,17 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <f:flashMessages />
+
+    City : {response.name}<br />
+    Country : {response.sys.country}<br />
+    Temprature {response.main.temp}<br />
+    Weather : {response.weather.description}<br />
+
+    <img src="http://openweathermap.org/img/w/{response.weather.icon}" alt="" />
+
+    <span>
+        {response.error}
+        {response.errorno}
+    </span>
+</f:section>
