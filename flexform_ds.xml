@@ -9,7 +9,7 @@
                 <el>
                     <settings.baseWeatherUrl>
                         <TCEforms>
-                            <label>base weather url</label>
+                            <label>Base API URL</label>
                             <config>
                                 <type>input</type>
                                 <readOnly>1</readOnly>
@@ -18,9 +18,10 @@
                             </config>
                         </TCEforms>
                     </settings.baseWeatherUrl>
+<!--
                     <settings.baseImgUrl>
                         <TCEforms>
-                            <label>base image url</label>
+                            <label>Image url</label>
                             <config>
                                 <type>input</type>
                                 <readOnly>1</readOnly>
@@ -29,9 +30,10 @@
                             </config>
                         </TCEforms>
                     </settings.baseImgUrl>
+-->
                     <settings.apiName>
                         <TCEforms>
-                            <label>Api name</label>
+                            <label>Select the widget type</label>
                             <config>
                                 <type>select</type>
                                 <items type="array">
@@ -40,32 +42,46 @@
                                         <numIndex index="1">weather</numIndex>
                                     </numIndex>
                                     <numIndex index="1" type="array">
-                                        <numIndex index="0">forecast</numIndex>
+                                        <numIndex index="0">3-hourly forecast</numIndex>
                                         <numIndex index="1">forecast</numIndex>
                                     </numIndex>
                                     <numIndex index="2" type="array">
-                                        <numIndex index="0">find</numIndex>
-                                        <numIndex index="1">find</numIndex>
+                                        <numIndex index="0">daily forecast</numIndex>
+                                        <numIndex index="1">forecast___daily</numIndex>
+                                    </numIndex>
+                                    <numIndex index="3" type="array">
+                                        <numIndex index="0">both</numIndex>
+                                        <numIndex index="1">both</numIndex>
                                     </numIndex>
                                 </items>
                             </config>
                         </TCEforms>
                     </settings.apiName>
-                    <settings.query>
+                    <settings.city>
                         <TCEforms>
-                            <label>Query</label>
+                            <label>Enter a city name</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
                                 <max>50</max>
-                                <eval>nospace</eval>
-                                <default>frankfurt,germany</default>
+                                <default>frankfurt</default>
                             </config>
                         </TCEforms>
-                    </settings.query>
+                    </settings.city>
+                    <settings.country>
+                        <TCEforms>
+                            <label>Enter a country name or an ISO country code (e.g. London or UK or GB)</label>
+                            <config>
+                                <type>input</type>
+                                <size>50</size>
+                                <max>50</max>
+                                <default>germany</default>
+                            </config>
+                        </TCEforms>
+                    </settings.country>
                     <settings.units>
                         <TCEforms>
-                            <label>units</label>
+                            <label>Select the unit of measurement</label>
                             <config>
                                 <type>select</type>
                                 <items type="array">
@@ -85,9 +101,10 @@
                             </config>
                         </TCEforms>
                     </settings.units>
+<!--
                     <settings.type>
                         <TCEforms>
-                            <label>type</label>
+                            <label>Set the type of the request</label>
                             <config>
                                 <type>select</type>
                                 <items type="array">
@@ -103,6 +120,18 @@
                             </config>
                         </TCEforms>
                     </settings.type>
+-->
+                    <settings.cnt>
+                        <TCEforms>
+                            <label>Set the amount of days for weather forecast</label>
+                            <config>
+                                <type>input</type>
+                                <size>10</size>
+                                <max>10</max>
+                                <eval>nospace</eval>
+                            </config>
+                        </TCEforms>
+                    </settings.cnt>
                 </el>
             </ROOT>
         </settings>

@@ -3,16 +3,54 @@
 <f:section name="main">
     <f:flashMessages />
 
-    City : {response.name}<br />
-    Country : {response.sys.country}<br />
-    Temprature {response.main.temp}<br />
-    Weather : {response.weather.description}<br />
+<!--
+    a trick to compare strings
+-->
+    <f:if condition="{0:apiName} == {0:'weather'}">
+        City : {response.name}<br />
+        Country : {response.sys.country}<br />
+        Temperature {response.main.temp}<br />
+        Weather : {response.weather.description}<br />
 
-    <img src="http://openweathermap.org/img/w/{response.weather.icon}" alt="" />
+        <img src="{imgUrl}{response.weather.icon}" alt="" />
+    </f:if>
+
+    <f:if condition="{0:apiName} == {0:'forecast'}">
+        City : {response.city.name}<br />
+        Country : {response.city.country}<br />
+
+        <f:for each="{response.list}" as="item">
+            Temperature {item.main.temp}<br />
+            Weather : {item.weather.description}<br />
+            <img src="{imgUrl}{item.weather.icon}" alt="" />
+        </f:for>
+    </f:if>
+
+    <f:if condition="{0:apiName} == {0:'forecast___daily'}">
+        City : {response.city.name}<br />
+        Country : {response.city.country}<br />
+
+        <f:for each="{response.list}" as="item">
+            Day {item.day}  {item.date}  {item.month} <br />
+            Temperature day {item.temp.day}<br />
+            Temperature night {item.temp.night}<br />
+            Weather : {item.weather.description}<br />
+            <img src="{imgUrl}{item.weather.icon}" alt="" />
+        </f:for>
+    </f:if>
+
 
     <span>
         {response.error}
         {response.errorno}
     </span>
-    {settings.imagewidth}
+    <a href="{url}" target="_blank">{url}</a>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
 </f:section>
+

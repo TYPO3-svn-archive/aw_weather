@@ -34,46 +34,51 @@ namespace Alexweb\AwWeather\Domain\Model;
  */
 class Weather extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
     protected $apiName;
-    protected $query;
+    protected $city;
+    protected $country;
     protected $units;
     protected $mode;
     protected $type;
     protected $url;
+    protected $cnt;
     protected $aParams = array();
-    public $baseWeatherUrl = "http://api.openweathermap.org/data/2.5/";
-    public $baseImgUrl = "http://openweathermap.org/img/w/";
+    protected $baseWeatherUrl = "http://api.openweathermap.org/data/2.5/";
+    protected $baseImgUrl = "http://openweathermap.org/img/w/";
 
-    /**
-     * @return mixed
-     */
-    public function getApiName() {
-        return $this->apiName;
+    public function getBaseImgUrl()
+    {
+        return $this->baseImgUrl;
     }
 
     /**
      * @param string $apiName
-     * possible options weather|find|forecast
+     * possible options weather|forecast/daily
      * @return $this
      */
     public function setApiName($apiName = "weather") {
+        if(preg_match("/___/", $apiName))
+        {
+            $apiParts = explode("___", $apiName);
+            $apiName = $apiParts[0] . "/" . $apiParts[1];
+        }
+
         $this->apiName = $apiName;
 
         return $this;
     }
 
-    public function getQuery() {
-        return $this->query;
-    }
-
-    public function setQuery($query) {
-        $this->query = $query;
-        $this->aParams["q"] = $this->query;
+    public function setCity($city) {
+        $this->city = $city;
+        $this->aParams["q"] = $this->city;
 
         return $this;
     }
 
-    public function getUnits() {
-        return $this->units;
+    public function setCountry($country) {
+        $this->country = $country;
+        $this->aParams["q"] .= "," . $this->country;
+
+        return $this;
     }
 
     public function setUnits($units = "metric") {
@@ -83,19 +88,11 @@ class Weather extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
         return $this;
     }
 
-    public function getMode() {
-        return $this->mode;
-    }
-
     public function setMode($mode = "json") {
         $this->mode = $mode;
         $this->aParams["mode"] = $this->mode;
 
         return $this;
-    }
-
-    public function getType() {
-        return $this->type;
     }
 
     public function setType($type = "accurate") {
@@ -105,18 +102,25 @@ class Weather extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
         return $this;
     }
 
-    public function getUrl() {
-        return $this->url;
+    public function setCnt($cnt = null) {
+        $this->cnt = $cnt;
+        $this->aParams["cnt"] = $this->cnt;
+
+        return $this;
     }
 
     public function setUrl() {
         $this->url =
             $this->baseWeatherUrl
-            . $this->getApiName()
+            . $this->apiName
             . $this->getParams()
         ;
 
         return $this;
+    }
+
+    public function getUrl() {
+        return $this->url;
     }
 
     protected function getParams()
@@ -127,7 +131,8 @@ class Weather extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
         {
             foreach($this->aParams as $key => $param)
             {
-                $queryString .= "&" . $key . "=" . $param;
+                if(!empty($param))
+                    $queryString .= "&" . $key . "=" . $param;
             }
         }
 

@@ -25,7 +25,7 @@ namespace Alexweb\AwWeather\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use Alexweb\AwWeather\Domain\Model\Weather;
-use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
+use Alexweb\AwWeather\Domain\Repository\WeatherRepository;
 
 /**
  *
@@ -36,65 +36,81 @@ use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
  */
 class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
-	protected $weatherRepository;
+    protected $weatherRepository;
 
-	/**
+    /**
 	 * action list
 	 *
 	 * @return void
 	 */
     public function listAction()
     {
+        $this->weatherRepository = new WeatherRepository();
+
+        //var_dump($this->settings["apiName"]);
+
+        switch($this->settings["apiName"])
+        {
+            case "weather":
+                $this->getWeather();
+            break;
+
+            case "forecast":
+            case "forecast___daily":
+                $this->getForecast();
+            break;
+        }
+    }
+
+    private function getWeather()
+    {
         //var_dump($this->settings);
-        $response = null;
 
         $Model = new Weather();
         $Model
             ->setApiName($this->settings["apiName"])
-            ->setQuery($this->settings["query"])
+            ->setCity($this->settings["city"])
+            ->setCountry($this->settings["country"])
             ->setUnits($this->settings["units"])
-            ->setType($this->settings["type"])
+            ->setType()
             ->setMode()
             ->setUrl()
         ;
 
         $url = $Model->getUrl();
 
-        if(curl_init())
-        {
-            $options = array(
-                CURLOPT_URL => $url,
-                CURLOPT_RETURNTRANSFER => 1
-            );
+        $response = $this->weatherRepository->getApiResponse($url);
 
-            $ch = curl_init();
-            curl_setopt_array($ch, $options);
-            $response = curl_exec($ch);
-
-            $response = json_decode($response, true);
-
-            if(curl_error($ch))
-            {
-                $response = array(
-                    "error" => curl_error($ch),
-                    //"message" => curl_strerror(curl_errno($ch)),
-                    "errorno" => curl_errno($ch)
-                );
-            }
-
-            curl_close($ch);
-        }
-        elseif(file_get_contents($url))
-        {
-            $response = json_decode(file_get_contents($url), true);
-        }
-
-        //var_dump($response);
-
-        if(count($response["weather"]) > 0)
-            $response["weather"] = $response["weather"][0];
-
+        $this->view->assign("url", $url);
+        $this->view->assign('apiName', $this->settings["apiName"]);
         $this->view->assign('response', $response);
+        $this->view->assign("imgUrl", $Model->getBaseImgUrl());
+    }
+
+    private function getForecast()
+    {
+        //var_dump($this->settings);
+
+        $Model = new Weather();
+        $Model
+            ->setApiName($this->settings["apiName"])
+            ->setCity($this->settings["city"])
+            ->setCountry($this->settings["country"])
+            ->setUnits($this->settings["units"])
+            ->setCnt($this->settings["cnt"])
+            ->setType()
+            ->setMode()
+            ->setUrl()
+        ;
+
+        $url = $Model->getUrl();
+        $response = $this->weatherRepository->getApiResponse($url);
+        //var_dump($response["list"]);
+
+        $this->view->assign("url", $url);
+        $this->view->assign('apiName', $this->settings["apiName"]);
+        $this->view->assign('response', $response);
+        $this->view->assign("imgUrl", $Model->getBaseImgUrl());
     }
 }
 ?>
