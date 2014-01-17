@@ -64,7 +64,7 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     private function getWeather()
     {
-        //var_dump($this->settings);
+        var_dump($this->settings);
 
         $Model = new Weather();
         $Model
@@ -81,7 +81,9 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $response = $this->weatherRepository->getApiResponse($url);
 
+        //var_dump($response);
         $this->view->assign("url", $url);
+        $this->view->assign('settings', $this->settings);
         $this->view->assign('apiName', $this->settings["apiName"]);
         $this->view->assign('response', $response);
         $this->view->assign("imgUrl", $Model->getBaseImgUrl());

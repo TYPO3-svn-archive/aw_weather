@@ -34,10 +34,10 @@ namespace Alexweb\AwWeather\Domain\Repository;
  */
 class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+    protected $apiResponse;
+
     public function getApiResponse($url)
     {
-        $response = null;
-
         if(curl_init())
         {
             $options = array(
@@ -47,13 +47,12 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
             $ch = curl_init();
             curl_setopt_array($ch, $options);
-            $response = curl_exec($ch);
 
-            $response = json_decode($response, true);
+            $this->apiResponse = json_decode(curl_exec($ch), true);
 
             if(curl_error($ch))
             {
-                $response = array(
+                $this->apiResponse = array(
                     "error" => curl_error($ch),
                     //"message" => curl_strerror(curl_errno($ch)),
                     "errorno" => curl_errno($ch)
@@ -64,15 +63,22 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
         elseif(file_get_contents($url))
         {
-            $response = json_decode(file_get_contents($url), true);
+            $this->apiResponse = json_decode(file_get_contents($url), true);
         }
 
-        if(count($response["weather"]) > 0)
-            $response["weather"] = $response["weather"][0];
+        $this->normalizeApiResponse();
 
-        if(isset($response["list"]))
+        return $this->apiResponse;
+    }
+
+    private function normalizeApiResponse()
+    {
+        if(count($this->apiResponse["weather"]) > 0)
+            $this->apiResponse["weather"] = $this->apiResponse["weather"][0];
+
+        if(isset($this->apiResponse["list"]))
         {
-            foreach($response["list"] as $key => $item)
+            foreach($this->apiResponse["list"] as $key => $item)
             {
                 //flattening the array. i dont see any reason why item['weather'] should be an array of arrays
                 if(count($item["weather"]) > 0)
@@ -83,13 +89,9 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $item["month"] = date("F",$item["dt"]);
 
                 //saving back to the array
-                $response["list"][$key] = $item;
+                $this->apiResponse["list"][$key] = $item;
             }
         }
-
-        //var_dump($response);
-        return $response;
     }
-
 }
 ?>

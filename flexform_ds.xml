@@ -135,5 +135,33 @@
                 </el>
             </ROOT>
         </settings>
+        <theme>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>Theme</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.theme>
+                        <TCEforms>
+                            <label>Choose a theme</label>
+                            <config>
+                                    <type>select</type>
+                                    <items type="array">
+                                        <numIndex index="0" type="array">
+                                            <numIndex index="0">default</numIndex>
+                                            <numIndex index="1">0</numIndex>
+                                        </numIndex>
+                                        <numIndex index="1" type="array">
+                                            <numIndex index="0">theme2</numIndex>
+                                            <numIndex index="1">1</numIndex>
+                                        </numIndex>
+                                    </items>
+                                </config>
+                        </TCEforms>
+                    </settings.theme>
+                </el>
+            </ROOT>
+        </theme>
     </sheets>
 </T3DataStructure>
