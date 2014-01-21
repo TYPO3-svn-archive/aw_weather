@@ -16,9 +16,9 @@ Extension Name
 :Version: 1.0.0
 :Description: manuals covering TYPO3 extension "Weather"
 :Language: en
-:Author: Alexandros
-:Creation: 2014-01-16
-:Generation: 10:33
+:Author: alexandros
+:Creation: 2014-01-21
+:Generation: 10:18
 :Licence: Open Content License available from `www.opencontent.org/opl.shtml <http://www.opencontent.org/opl.shtml>`_
 
 The content of this document is related to TYPO3, a GNU/GPL CMS/Framework available from `www.typo3.org

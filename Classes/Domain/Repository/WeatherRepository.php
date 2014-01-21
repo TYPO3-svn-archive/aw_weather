@@ -4,7 +4,7 @@ namespace Alexweb\AwWeather\Domain\Repository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 Alexandros <websurfer992@gmail.com>, alex-web.gr
+ *  (c) 2014 alexandros <websurfer992@gmail.com>, alex-web.gr
  *
  *  All rights reserved
  *
@@ -32,8 +32,7 @@ namespace Alexweb\AwWeather\Domain\Repository;
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
-{
+class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
     protected $apiResponse;
 
     public function getApiResponse($url)
@@ -93,5 +92,6 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
         }
     }
+
 }
 ?>

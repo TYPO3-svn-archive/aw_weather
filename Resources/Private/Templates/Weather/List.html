@@ -1,18 +1,15 @@
-{namespace pager=Alexweb\AwWeather\ViewHelpers}
+{namespace helper=Alexweb\AwWeather\ViewHelpers}
+
 <f:layout name="Default" />
 
 <f:section name="main">
+<f:flashMessages />
 
-    <f:flashMessages />
-
-    <pager:addPublicResources />
-    <!--
-        a trick to compare strings
-    -->
-
+    <helper:addPublicResources />
     <div class="black">
         asass
     </div>
+    {response.name}
     <f:if condition="{0:apiName} == {0:'weather'}">
         City : {response.name}<br />
         Country : {response.sys.country}<br />
@@ -46,18 +43,4 @@
         </f:for>
     </f:if>
 
-
-    <span>
-        {response.error}
-        {response.errorno}
-    </span>
-    <a href="{url}" target="_blank">{url}</a>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
 </f:section>
-

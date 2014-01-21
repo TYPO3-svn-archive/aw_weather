@@ -6,8 +6,9 @@ class AddPublicResourcesViewHelper extends  \TYPO3\CMS\Fluid\ViewHelpers\Be\Abst
     public function render() {
         $doc = $this->getDocInstance();
         $pageRenderer = $doc->getPageRenderer();
+        $extRelPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath("aw_weather");
 
-        $pageRenderer->addCssFile('/typo3conf/ext/aw_weather/Resources/Public/themes/default/css/styles.css');
+        $pageRenderer->addCssFile($extRelPath . "Resources/Public/Themes/default/css/styles.css");
 
         $output = $this->renderChildren();
         $output = $doc->startPage("aw_weather") . $output;

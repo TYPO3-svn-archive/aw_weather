@@ -5,15 +5,15 @@ if (!defined('TYPO3_MODE')) {
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'Alexweb.' . $_EXTKEY,
-	'Feweather',
+	'Feawweather',
 	array(
 		'Weather' => 'list',
-
+		
 	),
 	// non-cacheable actions
 	array(
-		'Weather' => 'list',
-
+		'Weather' => '',
+		
 	)
 );
 

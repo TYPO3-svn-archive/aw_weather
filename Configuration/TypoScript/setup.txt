@@ -37,3 +37,15 @@ plugin.tx_awweather._CSS_DEFAULT_STYLE (
 		vertical-align:top;
 	}
 )
+
+ # Module configuration
+module.tx_awweather {
+	persistence {
+		storagePid = {$module.tx_awweather.persistence.storagePid}
+	}
+	view {
+		templateRootPath = {$module.tx_awweather.view.templateRootPath}
+		partialRootPath = {$module.tx_awweather.view.partialRootPath}
+		layoutRootPath = {$module.tx_awweather.view.layoutRootPath}
+	}
+}

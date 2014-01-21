@@ -4,7 +4,7 @@ namespace Alexweb\AwWeather\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 Alexandros <websurfer992@gmail.com>, alex-web.gr
+ *  (c) 2014 alexandros <websurfer992@gmail.com>, alex-web.gr
  *
  *  All rights reserved
  *
@@ -24,8 +24,6 @@ namespace Alexweb\AwWeather\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use Alexweb\AwWeather\Domain\Model\Weather;
-use Alexweb\AwWeather\Domain\Repository\WeatherRepository;
 
 /**
  *
@@ -34,11 +32,19 @@ use Alexweb\AwWeather\Domain\Repository\WeatherRepository;
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
+use Alexweb\AwWeather\Domain\Model\Weather;
+use Alexweb\AwWeather\Domain\Repository\WeatherRepository;
 class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
-    protected $weatherRepository;
+	/**
+	 * weatherRepository
+	 *
+	 * @var \Alexweb\AwWeather\Domain\Repository\WeatherRepository
+	 * @inject
+	 */
+	protected $weatherRepository;
 
-    /**
+	/**
 	 * action list
 	 *
 	 * @return void
@@ -53,12 +59,12 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         {
             case "weather":
                 $this->getWeather();
-            break;
+                break;
 
             case "forecast":
             case "forecast___daily":
                 $this->getForecast();
-            break;
+                break;
         }
     }
 
@@ -114,5 +120,6 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign('response', $response);
         $this->view->assign("imgUrl", $Model->getBaseImgUrl());
     }
+
 }
 ?>

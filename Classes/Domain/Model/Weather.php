@@ -4,7 +4,7 @@ namespace Alexweb\AwWeather\Domain\Model;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 Alexandros <websurfer992@gmail.com>, alex-web.gr
+ *  (c) 2014 alexandros <websurfer992@gmail.com>, alex-web.gr
  *
  *  All rights reserved
  *
