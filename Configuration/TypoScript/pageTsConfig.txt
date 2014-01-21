@@ -1,6 +1,0 @@
-mod.wizards.newContentElement.wizardItems.plugins.elements.tx_fe_weather {
-    icon = gfx/c_wiz/regular_text.gif
-    title = Scared Hello News
-    description = Displays Scared News
-    tt_content_defValues.CType = fe_weather
-}

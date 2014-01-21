@@ -1,6 +1,6 @@
-.default .black
+.theme2 .black
 {
-    background: #000;
+    background: red;
     width: 50px;
     height: 50px;
 }

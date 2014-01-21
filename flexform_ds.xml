@@ -150,11 +150,11 @@
                                     <items type="array">
                                         <numIndex index="0" type="array">
                                             <numIndex index="0">default</numIndex>
-                                            <numIndex index="1">0</numIndex>
+                                            <numIndex index="1">default</numIndex>
                                         </numIndex>
                                         <numIndex index="1" type="array">
                                             <numIndex index="0">theme2</numIndex>
-                                            <numIndex index="1">1</numIndex>
+                                            <numIndex index="1">theme2</numIndex>
                                         </numIndex>
                                     </items>
                                 </config>

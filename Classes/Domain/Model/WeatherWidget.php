@@ -1,5 +1,5 @@
 <?php
-namespace Alexweb\AwWeather\Controller;
+namespace Alexweb\AwWeather\Domain\Model;
 
 /***************************************************************
  *  Copyright notice
@@ -32,25 +32,7 @@ namespace Alexweb\AwWeather\Controller;
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
-
-	/**
-	 * weatherRepository
-	 *
-	 * @var \Alexweb\AwWeather\Domain\Repository\WeatherRepository
-	 * @inject
-	 */
-	protected $weatherRepository;
-
-	/**
-	 * action list
-	 *
-	 * @return void
-	 */
-	public function listAction() {
-		$weathers = $this->weatherRepository->findAll();
-		$this->view->assign('weathers', $weathers);
-	}
+class WeatherWidget extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 }
 ?>

@@ -1,46 +1,34 @@
-{namespace helper=Alexweb\AwWeather\ViewHelpers}
-
 <f:layout name="Default" />
 
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
 <f:section name="main">
+<h1>Listing for Weather</h1>
+
 <f:flashMessages />
 
-    <helper:addPublicResources />
-    <div class="black">
-        asass
-    </div>
-    {response.name}
-    <f:if condition="{0:apiName} == {0:'weather'}">
-        City : {response.name}<br />
-        Country : {response.sys.country}<br />
-        Temperature {response.main.temp}<br />
-        Weather : {response.weather.description}<br />
+<table  class="tx_awweather" >
+	<tr>
+		<th> </th>
+		<th> </th>
+	</tr>
 
-        <img src="{imgUrl}{response.weather.icon}" alt="" />
-    </f:if>
+	<f:for each="{weathers}" as="weather">
+		<tr>
+			<td><f:link.action action="edit" arguments="{weather : weather}">Edit</f:link.action></td>
+			<td><f:link.action action="delete" arguments="{weather : weather}">Delete</f:link.action></td>
+		</tr>
+	</f:for>
+</table>
 
-    <f:if condition="{0:apiName} == {0:'forecast'}">
-        City : {response.city.name}<br />
-        Country : {response.city.country}<br />
-
-        <f:for each="{response.list}" as="item">
-            Temperature {item.main.temp}<br />
-            Weather : {item.weather.description}<br />
-            <img src="{imgUrl}{item.weather.icon}" alt="" />
-        </f:for>
-    </f:if>
-
-    <f:if condition="{0:apiName} == {0:'forecast___daily'}">
-        City : {response.city.name}<br />
-        Country : {response.city.country}<br />
-
-        <f:for each="{response.list}" as="item">
-            Day {item.day}  {item.date}  {item.month} <br />
-            Temperature day {item.temp.day}<br />
-            Temperature night {item.temp.night}<br />
-            Weather : {item.weather.description}<br />
-            <img src="{imgUrl}{item.weather.icon}" alt="" />
-        </f:for>
-    </f:if>
-
+<f:link.action action="new">New Weather</f:link.action>
 </f:section>
