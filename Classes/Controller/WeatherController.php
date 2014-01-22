@@ -5,7 +5,7 @@ namespace Alexweb\AwWeather\Controller;
  *  Copyright notice
  *
  *  (c) 2014 alexandros <websurfer992@gmail.com>, alex-web.gr
- *  
+ *
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,6 +24,8 @@ namespace Alexweb\AwWeather\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use Alexweb\AwWeather\Domain\Repository\WeatherRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  *
@@ -42,15 +44,51 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	protected $weatherRepository;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->weatherRepository = new WeatherRepository();
+    }
 	/**
 	 * action list
 	 *
 	 * @return void
 	 */
-	public function listAction() {
-		$weathers = $this->weatherRepository->findAll();
-		$this->view->assign('weathers', $weathers);
+	public function listAction()
+    {
+        $themes = $this->weatherRepository->getThemes();
+
+        $this->view->assign("themes", $themes);
 	}
+
+    public function generateCssAction()
+    {
+        $css = "css";
+        $GeneralUtility = new GeneralUtility();
+        $Post = $GeneralUtility->_POST();
+
+        $themes = $this->weatherRepository->getThemes();
+
+        if(isset($Post["theme"]))
+        {
+            $this->weatherRepository->setTheme($Post["theme"]);
+            $css = $this->weatherRepository->generateCss($Post["theme"]);
+        }
+
+        $this->view->assign("themes", $themes);
+        $this->view->assign("css", $css);
+    }
+
+    protected function getIconsAction()
+    {
+        $this->weatherRepository->getDefaultImages();
+    }
+
+    public function uploadThemeAction()
+    {
+        $this->weatherRepository->uploadTheme();
+    }
 
 }
 ?>

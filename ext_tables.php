@@ -16,11 +16,11 @@ if (TYPO3_MODE === 'BE') {
 	 */
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
 		'Alexweb.' . $_EXTKEY,
-		'web',	 // Make module a submodule of 'web'
+		'user',	 // Make module a submodule of 'user'
 		'beawweather',	// Submodule key
 		'',						// Position
 		array(
-			'WeatherWidget' => 'index, list',
+            'Weather' => 'list,generateCss,getIcons,uploadTheme',
 		),
 		array(
 			'access' => 'user,group',

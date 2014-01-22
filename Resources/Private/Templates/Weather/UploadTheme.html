@@ -1,0 +1,12 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+    <form enctype="multipart/form-data" method="post" action="">
+        <label>Choose a zip file to upload:
+        <input type="file" name="files" /></label>
+        <br />
+        <input type="submit" name="submit" value="Upload" />
+    </form>
+
+    <f:link.action action="list">back to list</f:link.action>
+</f:section>

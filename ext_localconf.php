@@ -7,13 +7,13 @@ if (!defined('TYPO3_MODE')) {
 	'Alexweb.' . $_EXTKEY,
 	'Feawweather',
 	array(
-		'WeatherWidget' => 'index, list',
+		'WeatherWidget' => 'list, index'
 
 	),
 	// non-cacheable actions
 	array(
 		'Weather' => '',
-		'WeatherWidget' => '',
+		'WeatherWidget' => ''
 
 	)
 );

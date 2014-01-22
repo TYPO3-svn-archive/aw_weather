@@ -24,8 +24,8 @@ namespace Alexweb\AwWeather\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use Alexweb\AwWeather\Domain\Model\Weather;
-use Alexweb\AwWeather\Domain\Repository\WeatherRepository;
+use Alexweb\AwWeather\Domain\Model\WeatherWidget;
+use Alexweb\AwWeather\Domain\Repository\WeatherWidgetRepository;
 
 /**
  *
@@ -38,12 +38,12 @@ class WeatherWidgetController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCo
 {
 
     /**
-     * weatherRepository
+     * weatherWidgetRepository
      *
-     * @var \Alexweb\AwWeather\Domain\Repository\WeatherRepository
+     * @var \Alexweb\AwWeather\Domain\Repository\WeatherWidgetRepository
      * @inject
      */
-    protected $weatherRepository;
+    protected $weatherWidgetRepository;
 
     /**
      * action index
@@ -52,32 +52,31 @@ class WeatherWidgetController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCo
      */
     public function indexAction()
     {
-        $this->weatherRepository = new WeatherRepository();
+    }
+
+    public function listAction()
+    {
+        $this->weatherWidgetRepository = new WeatherWidgetRepository();
 
         //var_dump($this->settings["apiName"]);
 
         switch($this->settings["apiName"]) {
             case "weather":
                 $this->getWeather();
-                break;
+            break;
 
             case "forecast":
             case "forecast___daily":
                 $this->getForecast();
-                break;
+            break;
         }
-    }
-
-    public function listAction()
-    {
-        var_dump(__FUNCTION__);
     }
 
     private function getWeather()
     {
         //var_dump($this->settings);
 
-        $Model = new Weather();
+        $Model = new WeatherWidget();
         $Model
             ->setApiName($this->settings["apiName"])
             ->setCity($this->settings["city"])
@@ -89,21 +88,20 @@ class WeatherWidgetController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCo
 
         $url = $Model->getUrl();
 
-        $response = $this->weatherRepository->getApiResponse($url);
+        $response = $this->weatherWidgetRepository->getApiResponse($url);
 
         //var_dump($response);
         $this->view->assign("url", $url);
         $this->view->assign('settings', $this->settings);
         $this->view->assign('apiName', $this->settings["apiName"]);
         $this->view->assign('response', $response);
-        $this->view->assign("imgUrl", $Model->getBaseImgUrl());
     }
 
     private function getForecast()
     {
         //var_dump($this->settings);
 
-        $Model = new Weather();
+        $Model = new WeatherWidget();
         $Model
             ->setApiName($this->settings["apiName"])
             ->setCity($this->settings["city"])
@@ -115,19 +113,12 @@ class WeatherWidgetController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCo
             ->setUrl();
 
         $url = $Model->getUrl();
-        $response = $this->weatherRepository->getApiResponse($url);
+        $response = $this->weatherWidgetRepository->getApiResponse($url);
         //var_dump($response["list"]);
 
         $this->view->assign("url", $url);
         $this->view->assign('apiName', $this->settings["apiName"]);
         $this->view->assign('response', $response);
-        $this->view->assign("imgUrl", $Model->getBaseImgUrl());
-    }
-
-    public function getTheme()
-    {
-        var_dump($this->settings);
-        return $this->settings["theme"];
     }
 }
 
