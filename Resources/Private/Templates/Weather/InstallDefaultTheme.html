@@ -1,0 +1,35 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+    <f:if condition="<f:count subject='{files}' /> > 0">
+        <h4>Theme files copied</h4>
+        <ul>
+            <f:for each="{files}" as="file">
+                <li>
+                    {file.name}
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
+
+    <h4>Files generated </h4>
+    <ul>
+        <li>
+            {isCssGenerated}
+        </li>
+    </ul>
+
+    <f:if condition="<f:count subject='{images}' /> > 0">
+        <h4>Images Downloaded</h4>
+        <ul>
+            <f:for each="{images}" as="image">
+                <li>
+                    {image.icon}
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
+
+    <f:link.action action="list">back to list</f:link.action>
+</f:section>

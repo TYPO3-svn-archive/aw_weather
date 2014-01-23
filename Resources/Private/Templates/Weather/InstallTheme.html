@@ -1,0 +1,34 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+    <p>
+        <f:if condition="{bIsThemeInstalled}">
+            <f:then>
+                Theme successfully installed
+            </f:then>
+            <f:else>
+                Theme Installation failed
+            </f:else>
+        </f:if>
+    </p>
+    <p>
+        <f:if condition="{bIsCssGenerated}">
+            <f:then>
+                Css file successfully generated
+            </f:then>
+            <f:else>
+                Css file creation failed
+            </f:else>
+        </f:if>
+    </p>
+    <p>Files</p>
+    <ul>
+        <f:for each="{aImagesDownloaded}" as="{aImageDownloaded}">
+            <li>
+                >> {aImageDownloaded.icon}
+            </li>
+        </f:for>
+    </ul>
+    <f:link.action action="list">back to list</f:link.action>
+</f:section>

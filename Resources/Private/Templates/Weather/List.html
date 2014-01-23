@@ -5,12 +5,22 @@
 <!--
     <td><f:link.action action="edit" arguments="{weather : weather}">Edit</f:link.action></td>
 -->
-    <f:for each="{themes}" as="theme">
-        {theme.basename} <br />
-    </f:for>
-    <f:link.action action="generateCss">generate css files from icons </f:link.action>
+    <h4>Available Themes</h4>
+    <ul>
+        <f:for each="{themes}" as="theme">
+            <li>
+                {theme.basename}
+            </li>
+        </f:for>
+    </ul>
+
+    <f:link.action action="installDefaultTheme">install Default Theme</f:link.action>
+    <br />
+    <f:link.action action="uploadTheme">upload Custom Theme</f:link.action>
+    <br />
     <br />
     <f:link.action action="getIcons">reload default icons</f:link.action>
     <br />
-    <f:link.action action="uploadTheme">upload</f:link.action>
+    <br />
+    <f:link.action action="generateCss">generate css files from icons </f:link.action>
 </f:section>

@@ -153,8 +153,8 @@
                                             <numIndex index="1">default</numIndex>
                                         </numIndex>
                                         <numIndex index="1" type="array">
-                                            <numIndex index="0">theme2</numIndex>
-                                            <numIndex index="1">theme2</numIndex>
+                                            <numIndex index="0">new theme</numIndex>
+                                            <numIndex index="1">new_theme</numIndex>
                                         </numIndex>
                                     </items>
                                 </config>

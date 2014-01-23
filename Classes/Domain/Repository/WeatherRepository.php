@@ -24,7 +24,6 @@ namespace Alexweb\AwWeather\Domain\Repository;
      *
      *  This copyright notice MUST APPEAR in all copies of the script!
      ***************************************************************/
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use ZipArchive;
 
 /**
@@ -37,24 +36,40 @@ use ZipArchive;
 class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     protected $extPath;
-    protected $theme = "default";
-    protected $staticThemesPath = "uploads/tx_awweather/themes/";
     protected $cssFolder;
     protected $iconsFolder;
     protected $themesFolder;
+    protected $initThemesPath;
+    protected $theme = "default";
     protected $imgPath = "http://openweathermap.org/img/w/";
+    protected $staticThemesPath = "uploads/tx_awweather/themes/";
 
     public function __construct()
     {
-        $this->themesFolder = $this->getThemesDir();
-        $this->iconsFolder = $this->themesFolder . $this->theme . "/icons/";
-        $this->cssFolder = $this->themesFolder . $this->theme . "/css/";
+        $this->extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath("aw_weather");
+        $this->themesFolder = PATH_site . $this->staticThemesPath;
+        $this->initThemesPath = PATH_site .$this->extPath . "Resources/Public/themes/" . $this->theme;
+    }
 
-        //$this->extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath("aw_weather");
+    protected function getCssFolder()
+    {
+        return $this->cssFolder = $this->themesFolder . $this->theme . "/css/";
+    }
+
+    protected function getIconsFolder()
+    {
+        return $this->iconsFolder = $this->themesFolder . $this->theme . "/icons/";
+    }
+
+    public function setTheme($theme)
+    {
+        if(!empty($theme))
+            $this->theme = $theme;
     }
 
     public function getDefaultImages()
     {
+        $files = array();
         for($i = 1;$i < 51; $i++)
         {
             $key = $i;
@@ -62,53 +77,51 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $key = "0" . $i;
 
             $file = file_get_contents($this->imgPath . $key . "d.png");
-
-            if($file)
-                $this->saveFile($this->iconsFolder, $key . "d.png", $file);
-
             $fileN = file_get_contents($this->imgPath . $key . "n.png");
 
-            if($fileN)
-                $this->saveFile($this->iconsFolder, $key . "n.png", $fileN);
+            if($file)
+            {
+                $isFileSaved = $this->saveFile($this->getIconsFolder(), $key . "d.png", $file);
+                $files[$key . "d"]["icon"] = $isFileSaved . $key . "d.png";
+            }
 
+            if($fileN)
+            {
+                $isFileSaved = $this->saveFile($this->getIconsFolder(), $key . "n.png", $fileN);
+                $files[$key . "n"]["icon"] = $isFileSaved . $key . "n.png";
+            }
         }
+
+        return $files;
     }
 
     protected function saveFile($filePath, $filename, $resource)
     {
-        //var_dump($filePath);
-
         if(!file_exists($filePath))
             mkdir($filePath, "0775", true);
 
-        $this->writeToFile($filePath . $filename, $resource);
+        return $this->writeToFile($filePath . $filename, $resource);
     }
 
     protected function writeToFile($filename, $resource)
     {
-        if (!$handle = fopen($filename, 'w+')) {
-            echo "Cannot open file <b>$filename</b> ";
-            echo "<br />";
-            exit;
-        }
+        $message = "Success, wrote to file ";
 
-        if (fwrite($handle, $resource) === FALSE) {
-            echo "Cannot write to file <b>$filename</b> ";
-            echo "<br />";
-            exit;
-        }
+        if (!$handle = fopen($filename, 'w+'))
+            $message = "Cannot open file ";
 
-        echo "Success, wrote to file <b>$filename</b> ";
-        echo "<br />";
+        if (fwrite($handle, $resource) === FALSE)
+            $message = "Cannot write to file ";
 
         fclose($handle);
+
+        return $message;
     }
 
     public function getThemes()
     {
         $folders = array();
 
-        //$themesFolder = $this->getThemesDir();
         $themesFolder = $this->themesFolder;
 
         if (is_dir($themesFolder)) {
@@ -143,27 +156,29 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function generateCss()
     {
-        $css = null;
-
+        $css = "/*** CAUTION ***/ \n/* File is automatically generated. All changes will be lost ! */\n\n";
         $icons = $this->getIcons();
+        $isFileSaved = false;
 
         if(!empty($icons))
+        {
             foreach($icons as $icon)
             {
                 $pathInfo = pathinfo($icon);
-                $cssSource = "." . $this->theme . " .icon_" . $pathInfo["filename"] . "{ background: url(../icons/" . $pathInfo['filename'] . "." . $pathInfo['extension'] .") no-repeat;}" . "\n";
+                $cssSource = "." . $this->theme . " .icon_" . $pathInfo["filename"] . "{ background: url(../icons/" . $pathInfo['filename'] . "." . $pathInfo['extension'] .") no-repeat;}\n";
                 $css .= $cssSource;
             }
 
-        $this->saveFile($this->cssFolder, "icons.css", $css);
+            $isFileSaved = $this->saveFile($this->getCssFolder(), "icons.css", $css);
+            $isFileSaved .= " icons.css";
+        }
 
-        //var_dump($css);
-        return $css;
+        return $isFileSaved;
     }
 
     protected function getIcons()
     {
-        $icons = $this->readDir($this->iconsFolder);
+        $icons = $this->readDir($this->getIconsFolder());
 
         return $icons;
     }
@@ -186,61 +201,120 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $folders;
     }
 
-    public function setTheme($theme)
+    public function installDefaultTheme()
     {
-        if(!empty($theme))
-            $this->theme = $theme;
-    }
+        $aFilesCopied = array();
+        $sourceDir  = $this->initThemesPath . "/css/";
+        $targetDir  = $this->getCssFolder();
 
-    protected function getThemesDir()
-    {
-        $requestUri = $_SERVER["REQUEST_URI"];
-        $parts = explode("/typo3/mod", $requestUri);
+        if(!file_exists($targetDir))
+            mkdir($targetDir, 0775, true);
 
-        if(isset($parts[0]))
-            $this->staticThemesPath = $parts[0] . "/" . $this->staticThemesPath;
+        $aFiles = $this->readDir($sourceDir);
 
-        $themesFolder = $_SERVER["DOCUMENT_ROOT"] . $this->staticThemesPath;
+        if(!empty($aFiles))
+            foreach($aFiles as $file)
+            {
+                $success = copy($sourceDir . $file, $targetDir . $file);
 
-        return $themesFolder;
+                if($success)
+                    $aFilesCopied[]["name"] = $file;
+
+            }
+
+        return $aFilesCopied;
     }
 
     public function uploadTheme()
     {
-        if($_FILES['files']['name'])
+        $aZipErrors = array();
+
+        if(isset($_FILES["files"]))
         {
-            var_dump($_FILES);
-            //if no errors...
-            if(!$_FILES['files']['error'])
-            {
-                $valid_file = true;
-                //now is the time to modify the future file name and validate the file
-                $new_file_name = strtolower($_FILES['files']['tmp_name']); //rename file
-                if($_FILES['files']['size'] > (1024000)) //can't be larger than 1 MB
-                {
-                    $valid_file = false;
-                    $message = 'Oops!  Your file\'s size is to large.';
-                }
+            $pathInfo = pathinfo($_FILES['files']['name']);
 
-                //if the file has passed the test
-                if($valid_file)
+            /**
+             * check for any upload errors
+             */
+            if($_FILES["files"]["error"] == 0)
+            {
+                /**
+                 * check for right file type
+                 */
+                if(
+                    (
+                        $_FILES['files']["type"] == "application/zip" ||
+                        $_FILES['files']["type"] == "multipart/x-zip"
+                    ) &&
+                    $pathInfo["extension"] == "zip"
+                )
                 {
-                    //move it to where we want it to be
-                    move_uploaded_file($_FILES['files']['name'], $this->themesFolder);
-                    $message = 'Congratulations!  Your file was accepted.';
+                    $filename = $pathInfo["filename"] . "." . $pathInfo["extension"];
+                    $target = $this->themesFolder . $filename;
+
+                    //upload and save
+                    move_uploaded_file( $_FILES['files']['tmp_name'], $target);
+
+                    //check for errors in the zip file
+                    $aZipErrors = $this->checkZip($target);
+
+                    //extract contents and delete zip file
+                    if(count($aZipErrors) == 0)
+                        $this->extractZipContents($target);
+
+                    unlink($target);
+                }
+                else
+                {
+                    $aZipErrors[]["message"] = "file type not supported";
                 }
             }
-            //if there is an error...
             else
-            {
-                //set that to be the returned message
-                $message = 'Ooops!  Your upload triggered the following error:  '.$_FILES['files']['error'];
-            }
-
-            echo $message;
+                $aZipErrors[]["message"] = $_FILES["files"]["error"];
         }
+
+        return $aZipErrors;
     }
 
+    protected function checkZip($zip)
+    {
+        $aErrorMessages = array();
+
+        if(file_exists($zip))
+        {
+            $pathInfo = pathinfo($zip);
+
+            $ZipArchive = new ZipArchive();
+            $ZipArchive->open($zip);
+
+            /**
+             * check if the required files and folders are here
+             */
+            if(!$ZipArchive->statName($pathInfo["filename"] . "/css/"))
+                $aErrorMessages[]["message"] = "folder : css not found";
+
+            if(!$ZipArchive->statName($pathInfo["filename"] . "/css/styles.css"))
+                $aErrorMessages[]["message"] = "file : css/style.css not found";
+
+            if(!$ZipArchive->statName($pathInfo["filename"] . "/icons/"))
+                $aErrorMessages[]["message"] = "folder : icons not found";
+        }
+        else
+            $aErrorMessages[]["message"] = "file does not exist";
+
+        return $aErrorMessages;
+    }
+
+    protected function extractZipContents($zip)
+    {
+        if(file_exists($zip))
+        {
+            $ZipArchive = new ZipArchive();
+            $ZipArchive->open($zip);
+
+            $ZipArchive->extractTo($this->themesFolder);
+        }
+    }
 }
 
 ?>

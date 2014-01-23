@@ -2,8 +2,6 @@
 
 <f:section name="main">
 
-    {css}<br />
-
     <f:for each="{themes}" as="theme">
         <form action="" method="post" class="themeList">
             <input type="hidden" value="{theme.basename}" name="theme" />
@@ -11,6 +9,8 @@
             <input type="submit" value="{theme.basename}" />
         </form>
     </f:for>
+
+    {css}<br />
 
     <f:link.action action="list">back to list</f:link.action>
 

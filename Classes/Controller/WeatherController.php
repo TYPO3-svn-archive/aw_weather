@@ -62,6 +62,30 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("themes", $themes);
 	}
 
+    public function installDefaultThemeAction()
+    {
+        $aFilesCopied = $this->weatherRepository->installDefaultTheme();
+        $aImagesDownloaded = $this->weatherRepository->getDefaultImages();
+        $isCssGenerated = $this->weatherRepository->generateCss();
+
+        $this->view->assign("files", $aFilesCopied);
+        $this->view->assign("isCssGenerated", $isCssGenerated);
+        $this->view->assign("images", $aImagesDownloaded);
+    }
+
+    public function uploadThemeAction()
+    {
+        $isUploaded = false;
+        $aZipErrors = $this->weatherRepository->uploadTheme();
+
+        if(isset($_FILES["files"]))
+            if(count($aZipErrors) == 0)
+                $isUploaded = true;
+
+        $this->view->assign("isUploaded", $isUploaded);
+        $this->view->assign("error_messages", $aZipErrors);
+    }
+
     public function generateCssAction()
     {
         $css = "css";
@@ -85,10 +109,9 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->weatherRepository->getDefaultImages();
     }
 
-    public function uploadThemeAction()
+    public function installThemeAction()
     {
-        $this->weatherRepository->uploadTheme();
-    }
 
+    }
 }
 ?>
