@@ -1,7 +1,16 @@
 <f:layout name="Default" />
 
 <f:section name="main">
+    <h3>Weather Dashboard - Download the default icons </h3>
+    <p>
+        You can download the default icons from <a href="http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes">openweathermap</a>.
+        All icons under the /themes/default/icons/ will be overwritten !!
+    </p>
 
-    getIcons
+    <form action="" method="post">
+        <input type="hidden" value="true" name="getIcons" />
+        <input type="submit" value="Go !" />
+    </form>
+
     <f:link.action action="list">back to list</f:link.action>
 </f:section>

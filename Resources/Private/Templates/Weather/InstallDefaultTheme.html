@@ -1,24 +1,35 @@
 <f:layout name="Default" />
 
 <f:section name="main">
+    <h3>Weather Dashboard - Install Default Theme </h3>
+    <p>
+        Install the default theme
+    </p>
+
+    <form action="" method="post">
+        <input type="hidden" value="true" name="installDefaultTheme" />
+        <input type="submit" value="Go !" />
+    </form>
 
     <f:if condition="<f:count subject='{files}' /> > 0">
         <h4>Theme files copied</h4>
         <ul>
             <f:for each="{files}" as="file">
                 <li>
-                    {file.name}
+                    {file.message}
                 </li>
             </f:for>
         </ul>
     </f:if>
 
-    <h4>Files generated </h4>
-    <ul>
-        <li>
-            {isCssGenerated}
-        </li>
-    </ul>
+    <f:if condition="{isCssGenerated}">
+        <h4>Files generated </h4>
+        <ul>
+            <li>
+                {isCssGenerated}
+            </li>
+        </ul>
+    </f:if>
 
     <f:if condition="<f:count subject='{images}' /> > 0">
         <h4>Images Downloaded</h4>

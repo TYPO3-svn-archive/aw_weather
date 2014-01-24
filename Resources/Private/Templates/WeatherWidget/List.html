@@ -18,7 +18,7 @@
             Temperature {response.main.temp}<br />
             Weather : {response.weather.description}<br />
 
-            <span class="icons icon_{response.weather.icon}">&nbsp;</span>
+            <span class="icons icon_{response.weather.id}">&nbsp;</span>
         </f:if>
 
         <f:if condition="{0:apiName} == {0:'forecast'}">
@@ -28,7 +28,7 @@
             <f:for each="{response.list}" as="item">
                 Temperature {item.main.temp}<br />
                 Weather : {item.weather.description}<br />
-                <span class="icons icon_{response.weather.icon}">&nbsp;</span>
+                <span class="icons icon_{response.weather.id}">&nbsp;</span>
             </f:for>
         </f:if>
 
@@ -41,7 +41,7 @@
                 Temperature day {item.temp.day}<br />
                 Temperature night {item.temp.night}<br />
                 Weather : {item.weather.description}<br />
-                <span class="icons icon_{response.weather.icon}">&nbsp;</span>
+                <span class="icons icon_{response.weather.id}">&nbsp;</span>
             </f:for>
         </f:if>
 

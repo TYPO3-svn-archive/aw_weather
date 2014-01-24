@@ -47,8 +47,14 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function __construct()
     {
         $this->extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath("aw_weather");
+        $this->themesFolder = $this->getThemesFolder();
+    }
+
+    protected function getThemesFolder()
+    {
         $this->themesFolder = PATH_site . $this->staticThemesPath;
-        $this->initThemesPath = PATH_site .$this->extPath . "Resources/Public/themes/" . $this->theme;
+
+        return $this->themesFolder;
     }
 
     protected function getCssFolder()
@@ -59,6 +65,11 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected function getIconsFolder()
     {
         return $this->iconsFolder = $this->themesFolder . $this->theme . "/icons/";
+    }
+
+    protected function getInitThemesPath()
+    {
+        return $this->initThemesPath = PATH_site .$this->extPath . "Resources/Public/themes/" . $this->theme;
     }
 
     public function setTheme($theme)
@@ -82,36 +93,48 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if($file)
             {
                 $isFileSaved = $this->saveFile($this->getIconsFolder(), $key . "d.png", $file);
-                $files[$key . "d"]["icon"] = $isFileSaved . $key . "d.png";
+                $files[$key . "d"]["icon"] = $isFileSaved;
             }
 
             if($fileN)
             {
                 $isFileSaved = $this->saveFile($this->getIconsFolder(), $key . "n.png", $fileN);
-                $files[$key . "n"]["icon"] = $isFileSaved . $key . "n.png";
+                $files[$key . "n"]["icon"] = $isFileSaved;
             }
         }
 
         return $files;
     }
 
+    protected function copyFile($sourceFile, $targetFile)
+    {
+        $success = copy($sourceFile, $targetFile);
+
+        if($success)
+            $message = "Copy successful for " .$targetFile;
+        else
+            $message = "Copy failed for " .$targetFile;
+
+        return $message;
+    }
+
     protected function saveFile($filePath, $filename, $resource)
     {
         if(!file_exists($filePath))
-            mkdir($filePath, "0775", true);
+            mkdir($filePath, 0775, true);
 
         return $this->writeToFile($filePath . $filename, $resource);
     }
 
     protected function writeToFile($filename, $resource)
     {
-        $message = "Success, wrote to file ";
+        $message = "Success, wrote to file $filename ";
 
         if (!$handle = fopen($filename, 'w+'))
-            $message = "Cannot open file ";
+            $message = "Cannot open file  $filename ";
 
         if (fwrite($handle, $resource) === FALSE)
-            $message = "Cannot write to file ";
+            $message = "Cannot write to file  $filename ";
 
         fclose($handle);
 
@@ -154,23 +177,62 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return false;
     }
 
+    /** TODO a way for mapping the icons to the weather codes
+     *  possible options
+     *      weather code in filename
+     *      visual mapping with the backend module
+     */
+
     public function generateCss()
+    {
+        //TODO css class name should be the weather code not the filename
+        $css = "/*** CAUTION ***/ \n/* File is automatically generated. All changes will be lost ! */\n\n";
+        $icons = $this->getIcons();
+        $isFileSaved = false;
+        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("aw_weather");
+        $weatherCodes = json_decode(file_get_contents($extPath . "Resources/Public/themes/default/js/weatherCodes.js"), true);
+
+        if(!empty($weatherCodes))
+        {
+            $extension = "png";
+            foreach($weatherCodes as $weatherCode)
+            {
+                if(!empty($weatherCode["icon"]))
+                {
+                    $cssSource = "." . $this->theme . " .icon_" . $weatherCode["id"] . "{ background: url(../icons/" . $weatherCode['icon'] . "." . $extension .") no-repeat;}\n";
+                    $css .= $cssSource;
+                }
+            }
+
+            $isFileSaved = $this->saveFile($this->getCssFolder(), "icons.css", $css);
+        }
+
+        return $isFileSaved;
+    }
+
+    public function generateJson()
     {
         $css = "/*** CAUTION ***/ \n/* File is automatically generated. All changes will be lost ! */\n\n";
         $icons = $this->getIcons();
         $isFileSaved = false;
+        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("aw_weather");
+        $weatherCodes = json_decode(file_get_contents($extPath . "Resources/Public/themes/default/js/weatherCodes.js"), true);
 
-        if(!empty($icons))
+        var_dump($icons);
+        if(!empty($weatherCodes))
         {
-            foreach($icons as $icon)
+            $extension = "png";
+            foreach($weatherCodes as $key => $weatherCode)
             {
-                $pathInfo = pathinfo($icon);
-                $cssSource = "." . $this->theme . " .icon_" . $pathInfo["filename"] . "{ background: url(../icons/" . $pathInfo['filename'] . "." . $pathInfo['extension'] .") no-repeat;}\n";
-                $css .= $cssSource;
+                if(!empty($weatherCode["icon"]))
+                {
+                    $pathInfo = pathinfo($icons[$key]);
+                    $cssSource = "." . $this->theme . " .icon_" . $weatherCode["id"] . "{ background: url(../icons/" . $pathInfo['filename'] . "." . $extension .") no-repeat;}\n";
+                    $css .= $cssSource;
+                }
             }
 
             $isFileSaved = $this->saveFile($this->getCssFolder(), "icons.css", $css);
-            $isFileSaved .= " icons.css";
         }
 
         return $isFileSaved;
@@ -191,7 +253,7 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if ($dh = opendir($dir)) {
                 while (($folder = readdir($dh)) !== false)
                 {
-                    if($folder != "." && $folder != "..")
+                    if($folder != "." && $folder != ".." && $folder != "Thumbs.db")
                         $folders[] = $folder;
                 }
                 closedir($dh);
@@ -204,8 +266,8 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function installDefaultTheme()
     {
         $aFilesCopied = array();
-        $sourceDir  = $this->initThemesPath . "/css/";
-        $targetDir  = $this->getCssFolder();
+        $sourceDir = $this->getInitThemesPath() . "/css/";
+        $targetDir = $this->getCssFolder();
 
         if(!file_exists($targetDir))
             mkdir($targetDir, 0775, true);
@@ -215,11 +277,7 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if(!empty($aFiles))
             foreach($aFiles as $file)
             {
-                $success = copy($sourceDir . $file, $targetDir . $file);
-
-                if($success)
-                    $aFilesCopied[]["name"] = $file;
-
+                $aFilesCopied[]["message"] = $this->copyFile($sourceDir . $file, $targetDir . $file);
             }
 
         return $aFilesCopied;
@@ -249,6 +307,12 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $pathInfo["extension"] == "zip"
                 )
                 {
+                    $this->setTheme($pathInfo["filename"]);
+
+                    if(!file_exists($this->themesFolder))
+                        mkdir($this->themesFolder, 0775, true);
+
+                    //TODO sanitize filename
                     $filename = $pathInfo["filename"] . "." . $pathInfo["extension"];
                     $target = $this->themesFolder . $filename;
 
@@ -314,19 +378,8 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
             $ZipArchive->extractTo($this->themesFolder);
         }
-    }
-
-    public function addThemesToFlexForm($config)
-    {
-        $optionList = array();
-        // add first option
-        $optionList[0] = array(0 => 'option1', 1 => 'value1');
-        // add second option
-        $optionList[1] = array(0 => 'option2', 1 => 'value2');
-        $optionList[2] = array(0 => 'option3', 1 => 'value3');
-        $config['items'] = array_merge($config['items'],$optionList);
-
-        return $config;
+        else
+            $aErrorMessages[]["message"] = "contents could not be extracted";
     }
 }
 

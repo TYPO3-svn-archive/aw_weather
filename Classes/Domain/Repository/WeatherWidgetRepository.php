@@ -40,7 +40,8 @@ class WeatherWidgetRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function getApiResponse($url)
     {
-        if(curl_init()) {
+        if(curl_init())
+        {
             $options = array(
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => 1
@@ -60,7 +61,9 @@ class WeatherWidgetRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
 
             curl_close($ch);
-        } elseif(file_get_contents($url)) {
+        }
+        elseif(file_get_contents($url))
+        {
             $this->apiResponse = json_decode(file_get_contents($url), true);
         }
 
@@ -74,8 +77,10 @@ class WeatherWidgetRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if(count($this->apiResponse["weather"]) > 0)
             $this->apiResponse["weather"] = $this->apiResponse["weather"][0];
 
-        if(isset($this->apiResponse["list"])) {
-            foreach($this->apiResponse["list"] as $key => $item) {
+        if(isset($this->apiResponse["list"]))
+        {
+            foreach($this->apiResponse["list"] as $key => $item)
+            {
                 //flattening the array. i dont see any reason why item['weather'] should be an array of arrays
                 if(count($item["weather"]) > 0)
                     $item["weather"] = $item["weather"][0];
@@ -89,7 +94,6 @@ class WeatherWidgetRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             }
         }
     }
-
 }
 
 ?>
