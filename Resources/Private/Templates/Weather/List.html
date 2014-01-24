@@ -2,17 +2,16 @@
 
 <f:section name="main">
 
-<!--
-    <td><f:link.action action="edit" arguments="{weather : weather}">Edit</f:link.action></td>
--->
-    <h4>Available Themes</h4>
-    <ul>
-        <f:for each="{themes}" as="theme">
-            <li>
-                {theme.basename}
-            </li>
-        </f:for>
-    </ul>
+    <f:if condition="<f:count subject='{themes}' /> > 0">
+        <h4>Available Themes</h4>
+        <ul>
+            <f:for each="{themes}" as="theme">
+                <li>
+                    {theme.basename}
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
 
     <f:link.action action="installDefaultTheme">install Default Theme</f:link.action>
     <br />

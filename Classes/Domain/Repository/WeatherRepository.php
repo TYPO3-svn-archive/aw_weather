@@ -42,7 +42,7 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected $initThemesPath;
     protected $theme = "default";
     protected $imgPath = "http://openweathermap.org/img/w/";
-    protected $staticThemesPath = "uploads/tx_awweather/themes/";
+    protected $staticThemesPath = "fileadmin/tx_awweather/themes/";
 
     public function __construct()
     {
@@ -314,6 +314,19 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
             $ZipArchive->extractTo($this->themesFolder);
         }
+    }
+
+    public function addThemesToFlexForm($config)
+    {
+        $optionList = array();
+        // add first option
+        $optionList[0] = array(0 => 'option1', 1 => 'value1');
+        // add second option
+        $optionList[1] = array(0 => 'option2', 1 => 'value2');
+        $optionList[2] = array(0 => 'option3', 1 => 'value3');
+        $config['items'] = array_merge($config['items'],$optionList);
+
+        return $config;
     }
 }
 

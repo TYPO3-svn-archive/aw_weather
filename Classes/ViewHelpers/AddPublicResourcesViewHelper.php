@@ -13,7 +13,7 @@ class AddPublicResourcesViewHelper extends  \TYPO3\CMS\Fluid\Core\ViewHelper\Abs
         $pageRenderer = new \TYPO3\CMS\Core\Page\PageRenderer();
 
         $extRelPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath("aw_weather");
-        $baseSaveDir = $extRelPath . "../../../uploads";
+        $baseSaveDir = $extRelPath . "../../../fileadmin";
         $extThemeUploadDir = "/tx_awweather/themes/";
         $destinationDir = $baseSaveDir . $extThemeUploadDir .  $this->arguments['theme'];
 
