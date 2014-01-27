@@ -1,0 +1,372 @@
+[
+    {
+        "id" : "200",
+        "meaning" : "thunderstorm with light rain ",
+        "icon" : null
+    },
+    {
+        "id" : "201",
+        "meaning" : "thunderstorm with rain ",
+        "icon" : null
+    },
+    {
+        "id" : "202",
+        "meaning" : "thunderstorm with heavy rain ",
+        "icon" : null
+    },
+    {
+        "id" : "210",
+        "meaning" : "light thunderstorm ",
+        "icon" : null
+    },
+    {
+        "id" : "211",
+        "meaning" : "thunderstorm ",
+        "icon" : null
+    },
+    {
+        "id" : "212",
+        "meaning" : "heavy thunderstorm ",
+        "icon" : null
+    },
+    {
+        "id" : "221",
+        "meaning" : "ragged thunderstorm ",
+        "icon" : null
+    },
+    {
+        "id" : "230",
+        "meaning" : "thunderstorm with light drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "231",
+        "meaning" : "thunderstorm with drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "232",
+        "meaning" : "thunderstorm with heavy drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "300",
+        "meaning" : "light intensity drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "301",
+        "meaning" : "drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "302",
+        "meaning" : "heavy intensity drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "310",
+        "meaning" : "light intensity drizzle rain ",
+        "icon" : null
+    },
+    {
+        "id" : "311",
+        "meaning" : "drizzle rain ",
+        "icon" : null
+    },
+    {
+        "id" : "312",
+        "meaning" : "heavy intensity drizzle rain ",
+        "icon" : null
+    },
+    {
+        "id" : "313",
+        "meaning" : "shower rain and drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "314",
+        "meaning" : "heavy shower rain and drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "321",
+        "meaning" : "shower drizzle ",
+        "icon" : null
+    },
+    {
+        "id" : "500",
+        "meaning" : "light rain ",
+        "icon" : "10d.png"
+    },
+    {
+        "id" : "501",
+        "meaning" : "moderate rain ",
+        "icon" : "10d.png"
+    },
+    {
+        "id" : "502",
+        "meaning" : "heavy intensity rain ",
+        "icon" : "10d.png"
+    },
+    {
+        "id" : "503",
+        "meaning" : "very heavy rain ",
+        "icon" : "10d.png"
+    },
+    {
+        "id" : "504",
+        "meaning" : "extreme rain ",
+        "icon" : "10d.png"
+    },
+    {
+        "id" : "511",
+        "meaning" : "freezing rain ",
+        "icon" : null
+    },
+    {
+        "id" : "520",
+        "meaning" : "light intensity shower rain ",
+        "icon" : null
+    },
+    {
+        "id" : "521",
+        "meaning" : "shower rain ",
+        "icon" : null
+    },
+    {
+        "id" : "522",
+        "meaning" : "heavy intensity shower rain ",
+        "icon" : null
+    },
+    {
+        "id" : "531",
+        "meaning" : "ragged shower rain ",
+        "icon" : null
+    },
+    {
+        "id" : "600",
+        "meaning" : "light snow ",
+        "icon" : null
+    },
+    {
+        "id" : "601",
+        "meaning" : "snow ",
+        "icon" : null
+    },
+    {
+        "id" : "602",
+        "meaning" : "heavy snow ",
+        "icon" : null
+    },
+    {
+        "id" : "611",
+        "meaning" : "sleet ",
+        "icon" : null
+    },
+    {
+        "id" : "612",
+        "meaning" : "shower sleet ",
+        "icon" : null
+    },
+    {
+        "id" : "615",
+        "meaning" : "light rain and snow ",
+        "icon" : null
+    },
+    {
+        "id" : "616",
+        "meaning" : "rain and snow ",
+        "icon" : null
+    },
+    {
+        "id" : "620",
+        "meaning" : "light shower snow ",
+        "icon" : null
+    },
+    {
+        "id" : "621",
+        "meaning" : "shower snow ",
+        "icon" : null
+    },
+    {
+        "id" : "622",
+        "meaning" : "heavy shower snow ",
+        "icon" : null
+    },
+    {
+        "id" : "701",
+        "meaning" : "mist ",
+        "icon" : null
+    },
+    {
+        "id" : "711",
+        "meaning" : "smoke ",
+        "icon" : null
+    },
+    {
+        "id" : "721",
+        "meaning" : "haze ",
+        "icon" : null
+    },
+    {
+        "id" : "731",
+        "meaning" : "sand/dust whirls ",
+        "icon" : null
+    },
+    {
+        "id" : "741",
+        "meaning" : "fog",
+        "icon" : null
+    },
+    {
+        "id" : "751",
+        "meaning" : "sand ",
+        "icon" : null
+    },
+    {
+        "id" : "761",
+        "meaning" : "dust ",
+        "icon" : null
+    },
+    {
+        "id" : "762",
+        "meaning" : "volcanic ash ",
+        "icon" : null
+    },
+    {
+        "id" : "771",
+        "meaning" : "squalls ",
+        "icon" : null
+    },
+    {
+        "id" : "781",
+        "meaning" : "tornado ",
+        "icon" : null
+    },
+    {
+        "id" : "800",
+        "meaning" : "sky is clear ",
+        "icon" : null
+    },
+    {
+        "id" : "801",
+        "meaning" : "few clouds ",
+        "icon" : null
+    },
+    {
+        "id" : "802",
+        "meaning" : "scattered clouds ",
+        "icon" : null
+    },
+    {
+        "id" : "803",
+        "meaning" : "broken clouds ",
+        "icon" : null
+    },
+    {
+        "id" : "804",
+        "meaning" : "overcast clouds ",
+        "icon" : null
+    },
+    {
+        "id" : "900",
+        "meaning" : "tornado",
+        "icon" : null
+    },
+    {
+        "id" : "901",
+        "meaning" : "tropical storm",
+        "icon" : null
+    },
+    {
+        "id" : "902",
+        "meaning" : "hurricane",
+        "icon" : null
+    },
+    {
+        "id" : "903",
+        "meaning" : "cold",
+        "icon" : null
+    },
+    {
+        "id" : "904",
+        "meaning" : "hot",
+        "icon" : null
+    },
+    {
+        "id" : "905",
+        "meaning" : "windy",
+        "icon" : null
+    },
+    {
+        "id" : "906",
+        "meaning" : "hail",
+        "icon" : null
+    },
+    {
+        "id" : "950",
+        "meaning" : "setting",
+        "icon" : null
+    },
+    {
+        "id" : "951",
+        "meaning" : "calm",
+        "icon" : null
+    },
+    {
+        "id" : "952",
+        "meaning" : "light breeze",
+        "icon" : null
+    },
+    {
+        "id" : "953",
+        "meaning" : "gentle breeze",
+        "icon" : null
+    },
+    {
+        "id" : "954",
+        "meaning" : "moderate breeze",
+        "icon" : null
+    },
+    {
+        "id" : "955",
+        "meaning" : "fresh breeze",
+        "icon" : null
+    },
+    {
+        "id" : "956",
+        "meaning" : "strong breeze",
+        "icon" : null
+    },
+    {
+        "id" : "957",
+        "meaning" : "high wind, near gale",
+        "icon" : null
+    },
+    {
+        "id" : "958",
+        "meaning" : "gale",
+        "icon" : null
+    },
+    {
+        "id" : "959",
+        "meaning" : "severe gale",
+        "icon" : null
+    },
+    {
+        "id" : "960",
+        "meaning" : "storm",
+        "icon" : null
+    },
+    {
+        "id" : "961",
+        "meaning" : "violent storm",
+        "icon" : null
+    },
+    {
+        "id" : "962",
+        "meaning" : "hurricane ",
+        "icon" : null
+    }
+]

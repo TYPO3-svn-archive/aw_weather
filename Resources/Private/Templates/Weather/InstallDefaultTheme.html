@@ -11,10 +11,15 @@
         <input type="submit" value="Go !" />
     </form>
 
-    <f:if condition="<f:count subject='{files}' /> > 0">
+    <f:if condition="<f:count subject='{files.assets}' /> > 0">
         <h4>Theme files copied</h4>
         <ul>
-            <f:for each="{files}" as="file">
+            <f:for each="{files.assets.css}" as="file">
+                <li>
+                    {file.message}
+                </li>
+            </f:for>
+            <f:for each="{files.assets.js}" as="file">
                 <li>
                     {file.message}
                 </li>
@@ -22,12 +27,14 @@
         </ul>
     </f:if>
 
-    <f:if condition="{isCssGenerated}">
+    <f:if condition="<f:count subject='{aFilesGenerated}' /> > 0">
         <h4>Files generated </h4>
         <ul>
-            <li>
-                {isCssGenerated}
-            </li>
+            <f:for each="{aFilesGenerated}" as="file">
+                <li>
+                    {file.message}
+                </li>
+            </f:for>
         </ul>
     </f:if>
 

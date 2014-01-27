@@ -63,11 +63,27 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("themes", $themes);
 	}
 
+	public function detailAction()
+    {
+        $GeneralUtility = new GeneralUtility();
+        $this->aPost = $GeneralUtility->_POST();
+
+        if(isset($this->aPost["theme"]))
+            $this->weatherRepository->setTheme($this->aPost["theme"]);
+
+        $theme = $this->weatherRepository->getTheme();
+
+        //var_dump($this->aPost["theme"]);
+        //var_dump($theme);
+
+        $this->view->assign("theme", $theme);
+	}
+
     public function installDefaultThemeAction()
     {
         $aFilesCopied = array();
         $aImagesDownloaded = array();
-        $isCssGenerated = false;
+        $aFilesGenerated = array();
 
         $GeneralUtility = new GeneralUtility();
         $this->aPost = $GeneralUtility->_POST();
@@ -76,24 +92,23 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         {
             $aFilesCopied = $this->weatherRepository->installDefaultTheme();
             $aImagesDownloaded = $this->weatherRepository->getDefaultImages();
-            $isCssGenerated = $this->weatherRepository->generateCss();
+            $aFilesGenerated = $this->weatherRepository->generateCss();
         }
 
         $this->view->assign("files", $aFilesCopied);
-        $this->view->assign("isCssGenerated", $isCssGenerated);
+        $this->view->assign("aFilesGenerated", $aFilesGenerated);
         $this->view->assign("images", $aImagesDownloaded);
     }
 
     public function uploadThemeAction()
     {
         $isUploaded = false;
-        $isCssGenerated = false;
-        $aImagesDownloaded = array();
+        $aFilesGenerated = array();
         $aZipErrors = array();
-
+/*
         $GeneralUtility = new GeneralUtility();
         $this->aPost = $GeneralUtility->_POST();
-
+*/
         if(isset($_FILES["files"]))
         {
             $aZipErrors = $this->weatherRepository->uploadTheme();
@@ -101,55 +116,51 @@ class WeatherController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             if(count($aZipErrors) == 0)
             {
                 $isUploaded = true;
+/*
+                if(isset($this->aPost["generateCss"]))
+                    $aFilesGenerated = $this->weatherRepository->generateCss();
 
                 if(isset($this->aPost["getDefaultImages"]))
                     $aImagesDownloaded = $this->weatherRepository->getDefaultImages();
-
-                if(isset($this->aPost["generateCss"]))
-                    $isCssGenerated = $this->weatherRepository->generateCss();
+*/
             }
         }
 
         $this->view->assign("isUploaded", $isUploaded);
         $this->view->assign("error_messages", $aZipErrors);
-        $this->view->assign("isCssGenerated", $isCssGenerated);
-        $this->view->assign("images", $aImagesDownloaded);
+        $this->view->assign("aFilesGenerated", $aFilesGenerated);
     }
 
     public function generateCssAction()
     {
-        $css = "css";
-        $themes = $this->weatherRepository->getThemes();
-
+        $aFilesGenerated = array();
         $GeneralUtility = new GeneralUtility();
         $this->aPost = $GeneralUtility->_POST();
 
-        if(isset($this->aPost["theme"]))
-        {
-            $this->weatherRepository->setTheme($this->aPost["theme"]);
-            $css = $this->weatherRepository->generateCss($this->aPost["theme"]);
-        }
+        if(isset($this->aPost["generateCss"]))
+            $aFilesGenerated = $this->weatherRepository->generateCss();
 
-        $this->view->assign("themes", $themes);
-        $this->view->assign("css", $css);
+        $this->view->assign("aFilesGenerated", $aFilesGenerated);
     }
 
     public function generateJsonAction()
     {
-        $css = "css";
-        $themes = $this->weatherRepository->getThemes();
-
+        $aFilesGenerated = array();
+        $aCssFilesGenerated = array();
         $GeneralUtility = new GeneralUtility();
         $this->aPost = $GeneralUtility->_POST();
 
-        if(isset($this->aPost["theme"]))
+        if(isset($this->aPost["icon"]))
         {
-            $this->weatherRepository->setTheme($this->aPost["theme"]);
-            $css = $this->weatherRepository->generateJson($this->aPost["theme"]);
+            $aFilesGenerated = $this->weatherRepository->generateWeatherCodesJson($this->aPost);
+            $aCssFilesGenerated = $this->weatherRepository->generateCss();
         }
 
-        $this->view->assign("themes", $themes);
-        $this->view->assign("css", $css);
+        $aIcons = $this->weatherRepository->matchWeatherCodesToIcons();
+
+        $this->view->assign("aIcons", $aIcons);
+        $this->view->assign("aCssFilesGenerated", $aCssFilesGenerated);
+        $this->view->assign("aFilesGenerated", $aFilesGenerated);
     }
 
     protected function getIconsAction()

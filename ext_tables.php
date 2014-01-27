@@ -20,7 +20,7 @@ if (TYPO3_MODE === 'BE') {
 		'beawweather',	// Submodule key
 		'',						// Position
 		array(
-            'Weather' => 'list,generateCss,generateJson,getIcons,uploadTheme,installTheme,installDefaultTheme',
+            'Weather' => 'list,detail,generateCss,generateJson,getIcons,uploadTheme,installTheme,installDefaultTheme',
 		),
 		array(
 			'access' => 'user,group',

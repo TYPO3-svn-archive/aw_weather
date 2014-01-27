@@ -4,17 +4,68 @@
     <h3>Weather Dashboard - Generate json from icons</h3>
 
     <p>
-        generate json from icons
+        Here you can match the weather codes to your icons if you haven't already provided a weatherCodes.json file
+        when installed the theme.
+        note : /theme_name/js/weatherCodes.json will be overwritten if you proceed.
     </p>
-    <f:for each="{themes}" as="theme">
-        <form action="" method="post" class="themeList">
-            <input type="hidden" value="{theme.basename}" name="theme" />
+    <f:if condition="<f:count subject='{aFilesGenerated}' /> > 0">
+        <h4>Files generated </h4>
+        <ul>
+            <f:for each="{aFilesGenerated}" as="file">
+                <li>
+                    {file.message}
+                </li>
+            </f:for>
+        </ul>
+        <ul>
+            <f:for each="{aCssFilesGenerated}" as="file">
+                <li>
+                    {file.message}
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
 
-            <input type="submit" value="{theme.basename}" />
+    <f:if condition="<f:count subject='{aIcons.weatherCodes}' /> > 0">
+        <h4>Weather Codes </h4>
+        <form action="" method="post">
+            <table>
+                <tr>
+                    <th>
+                        id
+                    </th>
+                    <th>
+                        description
+                    </th>
+                    <th>
+                        icon
+                    </th>
+                </tr>
+                <f:for each="{aIcons.weatherCodes}" as="weatherCode">
+                    <tr>
+                        <td>
+                            {weatherCode.id}
+                        </td>
+                        <td>
+                            {weatherCode.meaning}
+                        </td>
+                        <td>
+                            <select name="icon[]">
+                                <option value="">---</option>
+                                <f:if condition="{weatherCode.icon}">
+                                    <option selected="selected" value="{weatherCode.icon}">{weatherCode.icon}</option>
+                                </f:if>
+                                <f:for each="{aIcons.icons}" as="iconItem">
+                                    <option value="{iconItem.icon}">{iconItem.icon}</option>
+                                </f:for>
+                            </select>
+                        </td>
+                    </tr>
+                </f:for>
+            </table>
+            <input type="submit" value="Go !" />
         </form>
-    </f:for>
-
-    {css}<br />
+    </f:if>
 
     <f:link.action action="list">back to list</f:link.action>
 

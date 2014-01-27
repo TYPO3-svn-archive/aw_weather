@@ -4,18 +4,23 @@
     <h3>Weather Dashboard - Generate css from icons</h3>
 
     <p>
-        Click on one of the buttons below to generate the /css/icons.css file that holds
-        the css rules for all available icons under /icons/
+        generate the /css/icons.css file that holds the css rules for all available icons under /icons/
     </p>
-    <f:for each="{themes}" as="theme">
-        <form action="" method="post" class="themeList">
-            <input type="hidden" value="{theme.basename}" name="theme" />
+    <form action="" method="post">
+        <input type="hidden" value="true" name="generateCss" />
+        <input type="submit" value="Go !" />
+    </form>
 
-            <input type="submit" value="{theme.basename}" />
-        </form>
-    </f:for>
-
-    {css}<br />
+    <f:if condition="<f:count subject='{aFilesGenerated}' /> > 0">
+        <h4>Files generated </h4>
+        <ul>
+            <f:for each="{aFilesGenerated}" as="file">
+                <li>
+                    {file.message}
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
 
     <f:link.action action="list">back to list</f:link.action>
 

@@ -3,14 +3,16 @@
 <f:section name="main">
     <h3>Weather Dashboard - Upload Custom Theme</h3>
     <form enctype="multipart/form-data" method="post" action="">
+        <h4>Step 1</h4>
         <p>
             <label>Choose a zip file to upload:</label>
             <input type="file" name="files" />
         </p>
+<!--
         <p>
             <label>
                 Generate CSS file /theme_name/css/icons.css ? <br />
-                Use this option only you have created your own icons but not the icons.css file
+                Use this option only you have created your own icons but not the icons.css file and have included a /theme_name/js/weatherCodes.json
             </label>
             <br />
             <input type="checkbox" name="generateCss" />
@@ -24,29 +26,34 @@
             <br />
             <input type="checkbox" name="getDefaultImages" />
         </p>
+-->
         <input type="submit" name="submit" value="Upload" />
     </form>
 
     <f:if condition="<f:count subject='{error_messages}' /> > 0">
-        <h4>The following errors occurred</h4>
-        <ul>
-            <f:for each="{error_messages}" as="error">
-                <li>
-                    {error.message}
-                </li>
-            </f:for>
-        </ul>
+        <f:then>
+            <h4>The following errors occurred</h4>
+            <ul>
+                <f:for each="{error_messages}" as="error">
+                    <li>
+                        {error.message}
+                    </li>
+                </f:for>
+            </ul>
+        </f:then>
     </f:if>
 
     <f:if condition="{isUploaded}">
         <h4>Theme was uploaded successfully</h4>
 
-        <f:if condition="{isCssGenerated}">
+        <f:if condition="<f:count subject='{aFilesGenerated}' /> > 0">
             <h4>Files generated </h4>
             <ul>
-                <li>
-                    {isCssGenerated}
-                </li>
+                <f:for each="{aFilesGenerated}" as="file">
+                    <li>
+                        {file.message}
+                    </li>
+                </f:for>
             </ul>
         </f:if>
 
@@ -61,7 +68,12 @@
             </ul>
         </f:if>
 
+        <h4>Step 2</h4>
+        <f:link.action action="generateJson">Match icons to weather codes </f:link.action>
     </f:if>
 
-    <f:link.action action="list">back to list</f:link.action>
+    <br />
+    <br />
+    <br />
+    <f:link.action action="list"><< back to list</f:link.action>
 </f:section>

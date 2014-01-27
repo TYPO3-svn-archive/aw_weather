@@ -37,17 +37,33 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     protected $extPath;
     protected $cssFolder;
+    protected $jsFolder;
+    protected $weatherCodesFile;
+    protected $weatherCodesSourceFile;
     protected $iconsFolder;
     protected $themesFolder;
     protected $initThemesPath;
     protected $theme = "default";
+    protected $defaultTheme = "default";
     protected $imgPath = "http://openweathermap.org/img/w/";
     protected $staticThemesPath = "fileadmin/tx_awweather/themes/";
 
+    protected $iconsFilename = "icons.css";
+    protected $weatherCodesFilename = "weatherCodes.json";
+    protected $weatherCodesSourceFilename = "weatherCodesSource.json";
+
     public function __construct()
     {
+        //var_dump($sessionData = $GLOBALS['BE_USER']->getSessionData('tx_awweather'));
         $this->extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath("aw_weather");
         $this->themesFolder = $this->getThemesFolder();
+
+        $this->theme = $this->getTheme();
+    }
+
+    protected function getInitThemesPath()
+    {
+        return $this->initThemesPath = PATH_site .$this->extPath . "Resources/Public/themes/";
     }
 
     protected function getThemesFolder()
@@ -62,20 +78,48 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $this->cssFolder = $this->themesFolder . $this->theme . "/css/";
     }
 
+    protected function getJsFolder()
+    {
+        return $this->jsFolder = $this->themesFolder . $this->theme . "/js/";
+    }
+
     protected function getIconsFolder()
     {
         return $this->iconsFolder = $this->themesFolder . $this->theme . "/icons/";
     }
 
-    protected function getInitThemesPath()
+    protected function getWeatherCodesFile()
     {
-        return $this->initThemesPath = PATH_site .$this->extPath . "Resources/Public/themes/" . $this->theme;
+        return $this->weatherCodesFile = $this->getJsFolder() . $this->weatherCodesFilename;
+    }
+
+    protected function getWeatherCodesSourceFile()
+    {
+        return $this->weatherCodesSourceFile = $this->getInitThemesPath() . "json/" . $this->weatherCodesSourceFilename;
     }
 
     public function setTheme($theme)
     {
         if(!empty($theme))
+        {
             $this->theme = $theme;
+
+            $sessionData = $GLOBALS['BE_USER']->getSessionData('tx_awweather');
+
+            $sessionData["aw_weather_theme"] = $theme;
+
+            $GLOBALS['BE_USER']->setAndSaveSessionData('tx_awweather', $sessionData);
+        }
+    }
+
+    public function getTheme()
+    {
+        $sessionData = $GLOBALS['BE_USER']->getSessionData('tx_awweather');
+
+        if(!empty($sessionData["aw_weather_theme"]))
+            return $this->theme = $sessionData["aw_weather_theme"];
+
+        return $this->theme;
     }
 
     public function getDefaultImages()
@@ -111,9 +155,9 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $success = copy($sourceFile, $targetFile);
 
         if($success)
-            $message = "Copy successful for " .$targetFile;
+            $message = "Copy successful to " . $targetFile;
         else
-            $message = "Copy failed for " .$targetFile;
+            $message = "Copy failed to " . $targetFile;
 
         return $message;
     }
@@ -187,65 +231,86 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         //TODO css class name should be the weather code not the filename
         $css = "/*** CAUTION ***/ \n/* File is automatically generated. All changes will be lost ! */\n\n";
-        $icons = $this->getIcons();
-        $isFileSaved = false;
-        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("aw_weather");
-        $weatherCodes = json_decode(file_get_contents($extPath . "Resources/Public/themes/default/js/weatherCodes.js"), true);
+        //$icons = $this->getIcons();
+        $aFilesSaved = array();
+
+        $weatherCodes = json_decode(file_get_contents($this->getWeatherCodesFile()), true);
 
         if(!empty($weatherCodes))
         {
-            $extension = "png";
             foreach($weatherCodes as $weatherCode)
             {
                 if(!empty($weatherCode["icon"]))
                 {
-                    $cssSource = "." . $this->theme . " .icon_" . $weatherCode["id"] . "{ background: url(../icons/" . $weatherCode['icon'] . "." . $extension .") no-repeat;}\n";
+                    $pathInfo = pathinfo($weatherCode["icon"]);
+
+                    $cssSource = "." . $this->theme . " .icon_" . $weatherCode["id"] . "{ background: url(../icons/" . $pathInfo['filename'] . "." . $pathInfo['extension'] . ") no-repeat;}\n";
                     $css .= $cssSource;
                 }
             }
 
-            $isFileSaved = $this->saveFile($this->getCssFolder(), "icons.css", $css);
+            $aFilesSaved[]["message"] = $this->saveFile($this->getCssFolder(), $this->iconsFilename, $css);
         }
-
-        return $isFileSaved;
-    }
-
-    public function generateJson()
-    {
-        $css = "/*** CAUTION ***/ \n/* File is automatically generated. All changes will be lost ! */\n\n";
-        $icons = $this->getIcons();
-        $isFileSaved = false;
-        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("aw_weather");
-        $weatherCodes = json_decode(file_get_contents($extPath . "Resources/Public/themes/default/js/weatherCodes.js"), true);
-
-        var_dump($icons);
-        if(!empty($weatherCodes))
+        else
         {
-            $extension = "png";
-            foreach($weatherCodes as $key => $weatherCode)
-            {
-                if(!empty($weatherCode["icon"]))
-                {
-                    $pathInfo = pathinfo($icons[$key]);
-                    $cssSource = "." . $this->theme . " .icon_" . $weatherCode["id"] . "{ background: url(../icons/" . $pathInfo['filename'] . "." . $extension .") no-repeat;}\n";
-                    $css .= $cssSource;
-                }
-            }
-
-            $isFileSaved = $this->saveFile($this->getCssFolder(), "icons.css", $css);
+            $aFilesSaved[]["message"] = "/theme_name/js/weatherCodes.json was not found. Please generate it and then try to create the stylesheet";
         }
 
-        return $isFileSaved;
+        //var_dump($aFilesSaved);
+
+        return $aFilesSaved;
     }
 
-    protected function getIcons()
+    public function matchWeatherCodesToIcons()
     {
-        $icons = $this->readDir($this->getIconsFolder());
+        $aFiles = array();
+        $aFiles["icons"] = $this->getIcons(true);
+
+        if(file_exists($this->getWeatherCodesFile()))
+            $aFiles["weatherCodes"] = json_decode(file_get_contents($this->getWeatherCodesFile()), true);
+        else
+            $aFiles["weatherCodes"] = json_decode(file_get_contents($this->getWeatherCodesSourceFile()), true);
+
+        return $aFiles;
+    }
+
+    public function generateWeatherCodesJson($post)
+    {
+        $json = array();
+        $aFilesSaved = array();
+
+        if(!empty($post))
+        {
+            $aFiles = json_decode(file_get_contents($this->getWeatherCodesSourceFile()), true);
+
+            if(!empty($aFiles))
+                foreach($aFiles as $key => $aFile)
+                {
+                    if(!empty($post["icon"][$key]))
+                        $icon = $post["icon"][$key];
+                    else
+                        $icon = null;
+
+                    $json[$key]["id"] = $aFile["id"];
+                    $json[$key]["meaning"] = $aFile["meaning"];
+                    $json[$key]["icon"] = $icon;
+                }
+
+            $aFilesSaved[]["message"] = $this->saveFile($this->getJsFolder(), $this->weatherCodesFilename, json_encode($json));
+        }
+
+        return $aFilesSaved;
+    }
+
+    protected function getIcons($isAssoc = false)
+    {
+        //var_dump($this->getIconsFolder());
+        $icons = $this->readDir($this->getIconsFolder(), $isAssoc);
 
         return $icons;
     }
 
-    protected function readDir($dir)
+    protected function readDir($dir, $isAssoc = false)
     {
         $folders = array();
 
@@ -254,7 +319,10 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 while (($folder = readdir($dh)) !== false)
                 {
                     if($folder != "." && $folder != ".." && $folder != "Thumbs.db")
-                        $folders[] = $folder;
+                        if($isAssoc)
+                            $folders[]["icon"] = $folder;
+                        else
+                            $folders[] = $folder;
                 }
                 closedir($dh);
             }
@@ -265,9 +333,37 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function installDefaultTheme()
     {
+        $this->setTheme($this->defaultTheme);
+
         $aFilesCopied = array();
-        $sourceDir = $this->getInitThemesPath() . "/css/";
-        $targetDir = $this->getCssFolder();
+
+        $aFilesCopied["assets"]["css"] = $this->installDefaultThemeAssets("css");
+        $aFilesCopied["assets"]["js"] = $this->installDefaultThemeAssets("js");
+
+        //var_dump($aFilesCopied["assets"]);
+
+        return $aFilesCopied;
+    }
+
+    public function installDefaultThemeAssets($asset)
+    {
+        $aFilesCopied = array();
+
+        if(empty($asset))
+            return $aFilesCopied;
+
+        switch($asset)
+        {
+            case "css":
+                $sourceDir = $this->getInitThemesPath() . $this->defaultTheme . "/css/";
+                $targetDir = $this->getCssFolder();
+            break;
+
+            case "js":
+                $sourceDir = $this->getInitThemesPath() . $this->defaultTheme . "/js/";
+                $targetDir = $this->getJsFolder();
+            break;
+        }
 
         if(!file_exists($targetDir))
             mkdir($targetDir, 0775, true);
@@ -359,9 +455,6 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
             if(!$ZipArchive->statName($pathInfo["filename"] . "/css/styles.css"))
                 $aErrorMessages[]["message"] = "file : css/style.css not found";
-
-            if(!$ZipArchive->statName($pathInfo["filename"] . "/icons/"))
-                $aErrorMessages[]["message"] = "folder : icons not found";
         }
         else
             $aErrorMessages[]["message"] = "file does not exist";

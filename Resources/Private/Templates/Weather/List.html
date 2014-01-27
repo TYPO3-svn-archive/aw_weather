@@ -4,13 +4,13 @@
     <h3>Weather Dashboard</h3>
     <f:if condition="<f:count subject='{themes}' /> > 0">
         <h4>Available Themes</h4>
-        <ul>
-            <f:for each="{themes}" as="theme">
-                <li>
-                    {theme.basename}
-                </li>
-            </f:for>
-        </ul>
+        <f:for each="{themes}" as="theme">
+            <form action="<f:uri.action action='detail'></f:uri.action>" method="post" class="themeList">
+                <input type="hidden" value="{theme.basename}" name="theme" />
+
+                <input type="submit" value="{theme.basename}" />
+            </form>
+        </f:for>
     </f:if>
 
     <f:link.action action="installDefaultTheme">install Default Theme</f:link.action>
@@ -19,10 +19,4 @@
     <br />
     <br />
     <f:link.action action="getIcons">reload default icons</f:link.action>
-    <br />
-    <br />
-    <f:link.action action="generateCss">generate css files from icons </f:link.action>
-    <br />
-    <br />
-    <f:link.action action="generateJson">generate json files from icons </f:link.action>
 </f:section>
