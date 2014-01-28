@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Weather',
-	'description' => 'fe weather widget based om openweathermap api ',
+	'description' => 'front-end weather widget based om openweathermap api along with backend module',
 	'category' => 'fe',
 	'author' => 'alexandros',
 	'author_email' => 'websurfer992@gmail.com',
@@ -27,7 +27,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '1.0.0',
+	'version' => '1.1.0',
 	'constraints' => array(
 		'depends' => array(
 			'extbase' => '6.0',

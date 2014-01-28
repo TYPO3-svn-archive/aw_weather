@@ -123,7 +123,7 @@
 -->
                     <settings.cnt>
                         <TCEforms>
-                            <label>Set the amount of days for weather forecast (the default is 7) </label>
+                            <label>Set the amount of days for weather forecast </label>
                             <config>
                                 <type>select</type>
                                 <items type="array">
