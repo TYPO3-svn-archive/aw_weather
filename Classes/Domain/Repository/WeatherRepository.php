@@ -244,7 +244,7 @@ class WeatherRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 {
                     $pathInfo = pathinfo($weatherCode["icon"]);
 
-                    $cssSource = "." . $this->theme . " .icon_" . $weatherCode["id"] . "{ background: url(../icons/" . $pathInfo['filename'] . "." . $pathInfo['extension'] . ") no-repeat;}\n";
+                    $cssSource = "." . $this->theme . " .icon_" . $weatherCode["id"] . "{ background-image: url(../icons/" . $pathInfo['filename'] . "." . $pathInfo['extension'] . ");}\n";
                     $css .= $cssSource;
                 }
             }

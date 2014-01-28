@@ -27,23 +27,23 @@
         </ul>
     </f:if>
 
-    <f:if condition="<f:count subject='{aFilesGenerated}' /> > 0">
-        <h4>Files generated </h4>
-        <ul>
-            <f:for each="{aFilesGenerated}" as="file">
-                <li>
-                    {file.message}
-                </li>
-            </f:for>
-        </ul>
-    </f:if>
-
     <f:if condition="<f:count subject='{images}' /> > 0">
         <h4>Images Downloaded</h4>
         <ul>
             <f:for each="{images}" as="image">
                 <li>
                     {image.icon}
+                </li>
+            </f:for>
+        </ul>
+    </f:if>
+
+    <f:if condition="<f:count subject='{aFilesGenerated}' /> > 0">
+        <h4>Files generated </h4>
+        <ul>
+            <f:for each="{aFilesGenerated}" as="file">
+                <li>
+                    {file.message}
                 </li>
             </f:for>
         </ul>

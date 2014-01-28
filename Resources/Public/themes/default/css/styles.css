@@ -7,7 +7,20 @@
 
 .default .icons
 {
+    background-repeat: no-repeat;
+    background-size: contain;
     width: 50px;
     height: 50px;
     display: block;
 }
+
+.default .days
+{
+    float: left;
+}
+
+.stretcher
+{
+    clear: both;
+}
+

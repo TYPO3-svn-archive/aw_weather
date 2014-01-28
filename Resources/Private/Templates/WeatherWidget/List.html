@@ -8,41 +8,53 @@
     <helper:addPublicResources theme="{settings.theme}" />
 
     <div class="{settings.theme}">
-        <div class="black">
-            asass
-        </div>
 
         <f:if condition="{0:apiName} == {0:'weather'}">
-            City : {response.name}<br />
-            Country : {response.sys.country}<br />
-            Temperature {response.main.temp}<br />
-            Weather : {response.weather.description}<br />
+            <div class="weather">
+                City : {response.name}<br />
+                Country : {response.sys.country}<br />
+                Temperature {response.main.temp}<br />
+                Weather : {response.weather.description}<br />
 
-            <span class="icons icon_{response.weather.id}">&nbsp;</span>
+                <span class="icons icon_{response.weather.id}">&nbsp;</span>
+            </div>
         </f:if>
 
         <f:if condition="{0:apiName} == {0:'forecast'}">
-            City : {response.city.name}<br />
-            Country : {response.city.country}<br />
+            <div class="forecast">
+                City : {response.city.name}<br />
+                Country : {response.city.country}<br />
 
-            <f:for each="{response.list}" as="item">
-                Temperature {item.main.temp}<br />
-                Weather : {item.weather.description}<br />
-                <span class="icons icon_{response.weather.id}">&nbsp;</span>
-            </f:for>
+                <f:for each="{response.list}" as="item">
+                    Temperature {item.main.temp}<br />
+                    Weather : {item.weather.description}<br />
+                    <span class="icons icon_{item.weather.id}">&nbsp;</span>
+                </f:for>
+            </div>
         </f:if>
 
         <f:if condition="{0:apiName} == {0:'forecast___daily'}">
-            City : {response.city.name}<br />
-            Country : {response.city.country}<br />
+            <div class="forecast_daily">
+                City : {response.city.name}<br />
+                Country : {response.city.country}<br />
 
-            <f:for each="{response.list}" as="item">
-                Day {item.day}  {item.date}  {item.month} <br />
-                Temperature day {item.temp.day}<br />
-                Temperature night {item.temp.night}<br />
-                Weather : {item.weather.description}<br />
-                <span class="icons icon_{response.weather.id}">&nbsp;</span>
-            </f:for>
+                <f:for each="{response.list}" as="item">
+                    <div class="days floatLeft">
+                        <h4>{item.day}</h4>
+                        <h5>{item.date}  {item.month}</h5>
+                        <p>
+                            <span class="icons icon_{item.weather.id}">&nbsp;</span>
+                        </p>
+                        <p>
+                            Low temp {item.temp.day}  High temp {item.temp.night}
+                        </p>
+                        <p>
+                            Weather : {item.weather.description}
+                        </p>
+                    </div>
+                </f:for>
+                <div class="stretcher"></div>
+            </div>
         </f:if>
 
     </div>

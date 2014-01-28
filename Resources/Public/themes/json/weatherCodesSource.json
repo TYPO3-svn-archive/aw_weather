@@ -97,27 +97,27 @@
     {
         "id" : "500",
         "meaning" : "light rain ",
-        "icon" : "10d.png"
+        "icon" : null
     },
     {
         "id" : "501",
         "meaning" : "moderate rain ",
-        "icon" : "10d.png"
+        "icon" : null
     },
     {
         "id" : "502",
         "meaning" : "heavy intensity rain ",
-        "icon" : "10d.png"
+        "icon" : null
     },
     {
         "id" : "503",
         "meaning" : "very heavy rain ",
-        "icon" : "10d.png"
+        "icon" : null
     },
     {
         "id" : "504",
         "meaning" : "extreme rain ",
-        "icon" : "10d.png"
+        "icon" : null
     },
     {
         "id" : "511",
