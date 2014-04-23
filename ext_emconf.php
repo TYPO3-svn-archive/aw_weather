@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'author' => 'alexandros',
 	'author_email' => 'websurfer992@gmail.com',
 	'author_company' => 'alex-web.gr',
-	'shy' => '1',
+	'shy' => '0',
 	'priority' => '',
 	'module' => '',
 	'state' => 'alpha',
@@ -27,12 +27,12 @@ $EM_CONF[$_EXTKEY] = array(
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '1.1.0',
+	'version' => '1.1.2',
 	'constraints' => array(
 		'depends' => array(
 			'extbase' => '6.0',
 			'fluid' => '6.0',
-			'typo3' => '6.1.0-6.1.99',
+			'typo3' => '6.2.0-6.2.99',
 		),
 		'conflicts' => array(
 		),
